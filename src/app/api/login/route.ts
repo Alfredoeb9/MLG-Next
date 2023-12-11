@@ -9,7 +9,7 @@ import db from '../../../../lib/db';
 import { compare } from 'bcrypt';
 
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest, res: any) {
     try {
         const body = await req.json();
 
@@ -31,7 +31,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         };
 
         if (existingUserByEmail.isVerified == false) {
-            return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
+            throw new Error("Email is not verified, Please verify email!")
+            // return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
         };
         // const body = await req.json();
         

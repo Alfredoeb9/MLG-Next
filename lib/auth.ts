@@ -29,38 +29,44 @@ export const options = {
               password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
+                // const dispatch = useAppDispatch()
               // Add logic here to look up the user from the credentials supplied
-            //   if (!credentials?.email || !credentials?.password) {
-            //     return null
-            //   }
+              if (!credentials?.email || !credentials?.password) {
+                return null
+              }
             //   const dispatch = useAppDispatch();
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(credentials) 
-                });
+                // const response = await fetch('/api/login', {
+                //     method: 'POST',
+                //     headers: {
+                //       'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify(credentials) 
+                // });
 
-                const user = await response.json()
+                // const user = await response.json()
 
-                console.log("user", user)
+                // console.log("user", user)
 
                 const existingUserByEmail = await db.user.findUnique({
                     where: {
                         email: credentials.email,
                     }
                 });
-                console.log("exist", existingUserByEmail)
+                console.log("existing", existingUserByEmail)
                 if (!existingUserByEmail){
                     return null;
                 }
 
-                // const passwordMatch = await compare(credentials.password, existingUserByEmail.password);
+                const passwordMatch = await compare(credentials.password, existingUserByEmail.password);
 
-                // if (!passwordMatch) {
-                //     return null;
-                // }
+                if (!passwordMatch) {
+                    return null;
+                }
+
+                if (existingUserByEmail.isVerified == false) {
+                    throw new Error("Email is not verified, Please verify email!")
+                    // return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
+                };
 
                 // localStorage.setItem("user", JSON.stringify(existingUserByEmail));
                 // dispatch(login(existingUserByEmail));
@@ -86,16 +92,17 @@ export const options = {
         signIn: "/auth/sign-in"
     },
     callbacks: {
-        // async jwt({token, account, user}) {
-        //     if (account) {
-        //         token.accessToken = account.access_token;
-        //         token.id = user.id
-        //     }
+        async jwt({token, account, user}) {     
+            if (account) {
+                token.accessToken = account.access_token;
+                token.id = token.id
+            }
 
-        //     return token
-        // },
-        async session({session, user}) {
-            session.user = user;
+            return token
+        },
+        async session({session, token}) {
+            // Using token here
+            session.user = token.id;
             return session;
         },
     },

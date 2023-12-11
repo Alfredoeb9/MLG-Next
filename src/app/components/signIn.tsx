@@ -41,29 +41,36 @@ export default function SignIn() {
 
     const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
+        try {
+			const signInData = await signIn("credentials", 
+				{ email: email, password: password, callbackUrl: "/"
+			});
+
+			console.log("signInData", signInData)
+
+			// const user = await fetch("/api/login", {
+			// 	method: 'POST',
+			// 	headers: {
+			// 	'Content-Type': 'application-json'
+			// 	},
+			// 	body: JSON.stringify({
+			// 	email: email,
+			// 	password: password,
+			// 	test: "test"
+			// 	})
+			// })
+
+			// console.log("user", user)
+			// localStorage.setItem("user", JSON.stringify(user));
+			// dispatch(login(user));
+			// return user
+			// redirect("/me")
+		} catch (error) {
+			console.log("error", error)
+		}
         
-        setLoading(true);
-        // const signInData = await signIn("credentials", 
-		// 	{ email: form?.email, password: form?.password
-		// });
-
-		const user = await fetch("/api/login", {
-			method: 'POST',
-			headers: {
-			  'Content-Type': 'application-json'
-			},
-			body: JSON.stringify({
-			  email: email,
-			  password: password,
-			  test: "test"
-			})
-		  })
-
-		console.log("user", user)
-		// localStorage.setItem("user", JSON.stringify(user));
-        // dispatch(login(user));
-		return user
-		// redirect("/me")
+        
     }
     return (
         <div className="login">
