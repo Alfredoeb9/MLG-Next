@@ -1,12 +1,17 @@
 "use client";
 import React from "react";
+import { useParams } from "next/navigation";
+import {useAppDispatch} from "../../../redux/hooks"
 // import { Link, useParams } from "react-router-dom";
 // import authAPI from "../../app/api/authApi";
 // import { verifyEmail } from "../../app/features/AuthContext";
 // import CircularIndeterminate from "../../components/spinner/Spinner";
 
 export default function VerifyEmail() {
-//   const { id } = useParams();
+  const dispatch = useAppDispatch()
+  //   const { id } = useParams();
+  const { token } = useParams();
+
 
   // const { Header } = Layout;
 //   const dispatch = useDispatch();
@@ -15,32 +20,32 @@ export default function VerifyEmail() {
   // const [isSuccess, setIsSuccess] = useState(false);
   // const [message, setMessage] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
-//   const fetchVerify = async () => {
-//     try {
-//       const verify = await authAPI.verifyEmail(id);
-//       dispatch(verifyEmail(verify));
-//       setIsSuccess(true);
-//       setIsLoading(false);
-//       return verify;
-//     } catch (error) {
-//       setIsLoading(false);
-//       setIsError(true);
-//       if (error.response && error.response.data && error.response.data.message)
-//         setMessage(error.response.data.message);
-//       else {
-//         setMessage("Error in verifying email!");
-//       }
-//     }
-//   };
-//   useEffect(() => {
-//     setIsLoading(true);
-//     if (id) {
-//       fetchVerify();
-//     } else {
-//       setIsError(true);
-//       setMessage("Error in verifying email!");
-//     }
-//   }, []);
+  // const fetchVerify = async () => {
+  //   try {
+  //     const verify = await authAPI.verifyEmail(id);
+  //     dispatch(verifyEmail(verify));
+  //     setIsSuccess(true);
+  //     setIsLoading(false);
+  //     return verify;
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     setIsError(true);
+  //     if (error.response && error.response.data && error.response.data.message)
+  //       setMessage(error.response.data.message);
+  //     else {
+  //       setMessage("Error in verifying email!");
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (id) {
+  //     fetchVerify();
+  //   } else {
+  //     setIsError(true);
+  //     setMessage("Error in verifying email!");
+  //   }
+  // }, []);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between p-24">

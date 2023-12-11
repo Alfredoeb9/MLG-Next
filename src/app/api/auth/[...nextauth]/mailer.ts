@@ -35,8 +35,6 @@ export async function sentVerifyUserEmail (toEmail: any, fullName: string, url: 
     const subTxt = "";
     const mainLink = url;
 
-    // console.log("ur", url)
-
     const html = await createEmailTemplate("forgotPassword.html", {
       fullName,
       content,
@@ -45,8 +43,6 @@ export async function sentVerifyUserEmail (toEmail: any, fullName: string, url: 
       subTxt,
       mainLink,
     });
-
-    console.log("html", html)
 
     const mailOptions = {
       from: SMTPConfig.FROM_EMAIL,

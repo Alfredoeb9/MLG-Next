@@ -6,6 +6,7 @@ import Header from "./components/header"
 import Provider from "./components/provider"
 import { getServerSession } from 'next-auth'
 import { options } from '../../lib/auth'
+import StoreProvider from "./components/storeProvider"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,8 +27,10 @@ export default async function RootLayout({
         <Provider session={session}>
           <Header />
         </Provider>
+         <StoreProvider>
+          {children}
+         </StoreProvider>
         
-        {children}
       </body>
     </html>
   )
