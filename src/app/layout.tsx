@@ -6,7 +6,7 @@ import Header from "./components/header"
 import Provider from "./components/provider"
 import { getServerSession } from 'next-auth'
 import { options } from '../../lib/auth'
-import StoreProvider from "./components/storeProvider"
+import StoreProvider from "./components/StoreProvider"
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -30,12 +30,11 @@ model User {
   lastName      String
   password      String
   isAdmin       Boolean
-  token         String    @default("")
   isVerified    Boolean   @default(false)
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
   sessions      Session[]
-  activateTokens ActivateToken[]
+  ActivateToken ActivateToken[]
 
   @@map("users")
 }

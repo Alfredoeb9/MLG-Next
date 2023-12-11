@@ -24,14 +24,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // send verification function
 
-        const link = `${process.env.REACT_APP_BASE_URL}/auth/verify-email/${token.split(".")[1]}`;
+        const link = `${process.env.REACT_APP_BASE_URL}/auth/verify-email/${token}`;
         const fullName = newUser.firstName + " " + newUser.lastName;
-        // await db.activateToken.create({
-        //     data: {
-        //         token: token,
-        //         userId: newUser.id
-        //     }
-        // })
+        await db.activateToken.create({
+            data: {
+                token: token,
+                userId: newUser.id
+            }
+        })
         await sentVerifyUserEmail(newUser.email, fullName, link)
         return NextResponse.json({ user: newUser, message: "User created Successfully"}, { status: 201 });
     } catch (error) {

@@ -29,40 +29,40 @@ const sendEmail = async (mailOptions: Options) => {
 };
 
 export async function sentVerifyUserEmail (toEmail: any, fullName: string, url: string) {
-    const content = `We're excited to have you get started. Please verify you email by clicking on the link below.`;
-    const title = "Welcome!";
-    const button = "Verify Email";
-    const subTxt = "";
-    const mainLink = url;
+  const content = `We're excited to have you get started. Please verify you email by clicking on the link below.`;
+  const title = "Welcome!";
+  const button = "Verify Email";
+  const subTxt = "";
+  const mainLink = url;
 
-    const html = await createEmailTemplate("forgotPassword.html", {
-      fullName,
-      content,
-      title,
-      button,
-      subTxt,
-      mainLink,
-    });
+  const html = await createEmailTemplate("forgotPassword.html", {
+    fullName,
+    content,
+    title,
+    button,
+    subTxt,
+    mainLink,
+  });
 
-    const mailOptions = {
-      from: SMTPConfig.FROM_EMAIL,
-      to: toEmail,
-      text: "This is a test string",
-      subject: "Verify your email for Major League Gaming!",
-      html: html
-    };
+  const mailOptions = {
+    from: SMTPConfig.FROM_EMAIL,
+    to: toEmail,
+    text: "This is a test string",
+    subject: "Verify your email for Major League Gaming!",
+    html: html
+  };
 
-    // try {
-    //   await transporter.sendMail({
-    //     ...mailOptions,
-    //     subject: "verify-email",
-    //     text: "This is a test string",
-    //     html: "<h1>Test Title</h1><p>Some body text</p>"
-    //   })
-    // }
+  // try {
+  //   await transporter.sendMail({
+  //     ...mailOptions,
+  //     subject: "verify-email",
+  //     text: "This is a test string",
+  //     html: "<h1>Test Title</h1><p>Some body text</p>"
+  //   })
+  // }
 
-    const sendEmailResponse = await sendEmail(mailOptions);
-    if (!sendEmailResponse) throw Error("Email Not Sent");
+  const sendEmailResponse = await sendEmail(mailOptions);
+  if (!sendEmailResponse) throw Error("Email Not Sent");
 
-    return sendEmailResponse;
+  return sendEmailResponse;
 }
