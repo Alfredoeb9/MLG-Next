@@ -2,7 +2,8 @@
   "include": [
     ".eslintrc.json",
     ".prettierrc",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/types"
   ],
   "compilerOptions": {
     /* LANGUAGE COMPILATION OPTIONS */

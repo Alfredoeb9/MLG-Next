@@ -1,15 +1,17 @@
 import EmailProvider from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { AuthOptions } from "next-auth";
+// import { AuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import db from "./db";
 import { useAppDispatch } from "../src/app/redux/hooks";
 import { useState } from "react";
 import { login } from "../src/app/redux/features/AuthContext";
 import { compare } from "bcrypt";
+import { User } from "@prisma/client";
+import { NextAuthOptions } from "next-auth";
 
-export const options = {
+export const options: NextAuthOptions = {
     providers: [
 
 		// EmailProvider({
@@ -18,41 +20,24 @@ export const options = {
 		// })
 
         CredentialsProvider({
-            // The name to display on the sign in form (e.g. "Sign in with...")
             name: "Credentials",
-            // `credentials` is used to generate a form on the sign in page.
-            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
+
             credentials: {
               email: { label: "Email", type: "email", placeholder: "jsmith" },
               password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
-                // const dispatch = useAppDispatch()
-              // Add logic here to look up the user from the credentials supplied
-              if (!credentials?.email || !credentials?.password) {
-                return null
-              }
-            //   const dispatch = useAppDispatch();
-                // const response = await fetch('/api/login', {
-                //     method: 'POST',
-                //     headers: {
-                //       'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify(credentials) 
-                // });
-
-                // const user = await response.json()
-
-                // console.log("user", user)
+            async authorize(credentials) {
+                // Add logic here to look up the user from the credentials supplied
+                if (!credentials?.email || !credentials?.password) {
+                    return null
+                }
 
                 const existingUserByEmail = await db.user.findUnique({
                     where: {
                         email: credentials.email,
                     }
                 });
-                console.log("existing", existingUserByEmail)
+                
                 if (!existingUserByEmail){
                     return null;
                 }
@@ -72,7 +57,7 @@ export const options = {
                 // dispatch(login(existingUserByEmail));
                 
                 return {
-                    id: existingUserByEmail.id,
+                    id: `${existingUserByEmail.id}`,
                     username: existingUserByEmail.username,
                     email: existingUserByEmail.email
                 }
@@ -92,18 +77,36 @@ export const options = {
         signIn: "/auth/sign-in"
     },
     callbacks: {
-        async jwt({token, account, user}) {     
+        async jwt({token, account, user}) {   
+            // console.log("token", token, "user", user)
+            if (user){
+                return {
+                    ...token,
+                    username: (user as User).username
+                }
+            }  
             if (account) {
                 token.accessToken = account.access_token;
-                token.id = token.id
+                token.id = token.id;
+                token.username = (user as User).username
+
+                console.log({user})
             }
 
             return token
         },
         async session({session, token}) {
-            // Using token here
-            session.user = token.id;
-            return session;
+            // session.user = token.id,
+            console.log("token", token, "session", session)
+            return {
+                ...session,
+                
+                user: {
+                    ...session.user,
+                    username: token.username,
+                    
+                }
+            }
         },
     },
     events: {
@@ -127,4 +130,4 @@ export const options = {
         //     }
         // }
     }
-} satisfies AuthOptions;
+}

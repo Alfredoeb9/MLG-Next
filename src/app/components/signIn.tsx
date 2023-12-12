@@ -1,16 +1,18 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { login, selectUserAuth } from "../../app/redux/features/AuthContext";
-import { redirect } from "next/navigation";
+import {  useRouter } from "next/navigation";
 
-export default function SignIn() {
+
+const SignIn = () => {
+	
 	const dispatch = useAppDispatch()
+	const router = useRouter();
     const [email, setEmail] = useState<string>("");
-	const user = useAppSelector(selectUserAuth)
+	const user = useAppSelector(selectUserAuth);
     const [loading, setLoading] = useState<boolean>(false);
 	const { isSuccess, message } = useSelector((state: { user: any; }) => state.user);
 	const [isVerified, setIsVerified] = useState<boolean>(false);
@@ -33,22 +35,35 @@ export default function SignIn() {
 			setIsVerified(true)
 		}
 
-		// if (user !== null) {
-		// 	setSpinnerLoading(true);
-		// 	redirect("/")
-		// }
-	}, [isSuccess, user, message, redirect])
+		if (user !== null) {
+			setSpinnerLoading(true);
+			router.push("/")
+		}
+	}, [isSuccess, user, message, router])
+
+	// console.log("session", session)
 
     const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
         try {
 			const signInData = await signIn("credentials", 
-				{ email: email, password: password, callbackUrl: "/"
+				{ email: email, password: password, redirect: false
 			});
 
-			console.log("signInData", signInData)
-
+			if (signInData?.error) {
+				console.log('error', signInData)
+			} 
+			console.log("sign", signInData)
+			dispatch(login({
+				user: signInData,
+				isError: false,
+				isSuccess: true,
+				isLoading: false,
+				message: undefined
+			}));
+			// router.push('/');
+			return signInData;
 			// const user = await fetch("/api/login", {
 			// 	method: 'POST',
 			// 	headers: {
@@ -61,13 +76,11 @@ export default function SignIn() {
 			// 	})
 			// })
 
-			// console.log("user", user)
 			// localStorage.setItem("user", JSON.stringify(user));
-			// dispatch(login(user));
-			// return user
-			// redirect("/me")
+			
 		} catch (error) {
 			console.log("error", error)
+			return error;
 		}
         
         
@@ -130,3 +143,5 @@ export default function SignIn() {
 		</div>
     )
 }
+
+export default SignIn;

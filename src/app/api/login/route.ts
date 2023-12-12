@@ -14,6 +14,10 @@ export async function POST(req: NextRequest, res: any) {
         const body = await req.json();
 
         const { email, password } = body;
+
+        if (email === "") throw new Error("Please provide a email");
+        if (password === "") throw new Error("Please provide a password");
+
         const existingUserByEmail = await db.user.findUnique({
             where: {
                 email: email
@@ -32,34 +36,9 @@ export async function POST(req: NextRequest, res: any) {
 
         if (existingUserByEmail.isVerified == false) {
             throw new Error("Email is not verified, Please verify email!")
-            // return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
         };
-        // const body = await req.json();
-        
-
-        // const isEmailValid = await emailRegx(email);
-
-        // if (!isEmailValid) throw NextResponse.json({message:"Please provide a proper email"});
-
-        // const newUser: any = await registerUser(username, firstName, lastName, email, password, isAdmin);
-
-        // //@ts-ignore
-        // const token = await createToken(newUser.id, isAdmin);
-
-        // // send verification function
-
-        // const link = `${process.env.REACT_APP_BASE_URL}/auth/verify-email/${token}`;
-        // const fullName = newUser.firstName + " " + newUser.lastName;
-        // await db.activateToken.create({
-        //     data: {
-        //         token: token,
-        //         userId: newUser.id
-        //     }
-        // })
-        // await sentVerifyUserEmail(newUser.email, fullName, link)
         return NextResponse.json({ user: existingUserByEmail, message: "User created Successfully"}, { status: 201 });
     } catch (error) {
-        console.log("error", error)
-        return NextResponse.json({ message: "incoming error", error}, { status: 500 })
+        return NextResponse.json({ message: `${error}`}, { status: 500 })
     }
 };

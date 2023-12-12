@@ -11,8 +11,11 @@ export async function getCurrentDateTime() {
     return moment().toISOString();
 }
 
-export async function createToken(id: any, isAdmin: any) {
-    return jwt.sign({id, isAdmin: isAdmin }, process.env.JWT_SECRET as any);
+export async function createToken(id: any, isAdmin: boolean) {
+    const token1: string = jwt.sign({id, isAdmin: isAdmin }, process.env.JWT_SECRET as any);
+    const token2: string = jwt.sign({id, isAdmin: isAdmin }, process.env.JWT_SECRET as any);
+    const secureToken = token1 + token2;
+    return secureToken;
 }
 // module.exports = {
 //     emailRegex: async (value: string) => {
