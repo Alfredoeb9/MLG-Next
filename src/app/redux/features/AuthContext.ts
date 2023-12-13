@@ -113,7 +113,7 @@ export const userAuthSlice = createSlice({
       state.message = "USER_AUTHORIZED";
       // state.user = action.payload;
     },
-    register: (state, action) => {
+    register: (state) => {
       state.isLoading = false;
       state.isSuccess = true;
       state.message = "USER_REGISTERED";

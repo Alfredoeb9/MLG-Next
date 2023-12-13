@@ -1,15 +1,19 @@
 "use client";
+import { register } from "app/redux/features/AuthContext";
+import { useAppDispatch } from "app/redux/hooks";
 import React, { useState } from "react";
 
 export default function Regiter() {
     // const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [username, setUsername] = useState("");
-    const [isVerified, setIsVerified] = useState(false);
-    const [spinnerLoading, setSpinnerLoading] = useState(true);
+    const dispatch = useAppDispatch();
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [isVerified, setIsVerified] = useState<boolean>(false);
+    const [spinnerLoading, setSpinnerLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
     // const { signup, error, isLoading } = useSignup();
     // const { resend, error2, isLoading2 } = useResend();
     // const user = useSelector(selectUserAuth);
@@ -17,7 +21,14 @@ export default function Regiter() {
     
 
     const handleSubmit = async (e: any) => {
+        setError("")
         e.preventDefault();
+
+        if (email === "") return setError("Please provide a proper email");
+        if (password === "") return setError("Please provide a proper email");
+        if (username === "") return setError("Please provide a proper email");
+        if (firstName === "") return setError("Please provide a proper email");
+        if (lastName === "") return setError("Please provide a proper email");
     
         const user = {
           username,
@@ -37,18 +48,22 @@ export default function Regiter() {
             })
 
             if (!data.ok) {
-                console.log('error', await data.json())
-                // throw new Error("Sorry! Please refresh and try signing up again!")
+                
+                let error = await data.json();
+                console.log("errorr if block", JSON.stringify(error))
+                setError(error.message)
             }
 
             const registeredUser = await data.json()
 
+            dispatch(register());
             return registeredUser
         } catch (error) {
-            console.log("error", error)
+            console.log("errorrrrrrrrr catch", JSON.stringify(error))
+            // console.log("errorrrrrrrrr", error)
         }
     
-        // dispatch(register(user));
+        
     
         // await signup(user);
     };
@@ -100,7 +115,7 @@ export default function Regiter() {
 
                             <button >Sign Up</button>
 
-                            {/* {error && <div className="error">{error}</div>} */}
+                            {error && <div className="error">{error}</div>}
                         </form>
                     ) : (
                         <div className="reverify">

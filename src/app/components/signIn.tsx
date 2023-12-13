@@ -1,10 +1,11 @@
+'use client';
 import React, { useEffect, useState } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { login, selectUserAuth } from "../../app/redux/features/AuthContext";
-import {  useRouter } from "next/navigation";
+import {  redirect, useRouter } from "next/navigation";
 
 
 const SignIn = () => {
@@ -19,9 +20,9 @@ const SignIn = () => {
 	const [spinnerLoading, setSpinnerLoading] = useState<boolean>(false);
 	const [verifyEmail, setVerifyEmail] = useState<boolean>(false);
 	const [password, setPassword] = useState<string>("");
-	// const { login2, error, isLoading } = useLogin();
+	const [error, setError] = useState<string | undefined>("");
 	// const { resend, error2, isLoading2 } = useResend();
-	const [show, setShow] = useState<Object>({ password: false });
+	const [show, setShow] = useState<any>({ password: false });
 
 	// const loginUser = async (email, password) => {
 	// 	setSpinnerLoading(true);
@@ -30,38 +31,46 @@ const SignIn = () => {
 	// 	const response = await fetch('/api/auth/sign-in')
 	// }
 
+	if (user !== null) {
+		redirect("/")
+	}
+
 	useEffect(() => {
+		console.log("message", message)
 		if (message === "USER_AUTHORIZED") {
 			setIsVerified(true)
 		}
 
-		if (user !== null) {
-			setSpinnerLoading(true);
-			router.push("/")
-		}
+		// if (user !== null) {
+		// 	setSpinnerLoading(true);
+		// 	router.push("/")
+		// }
 	}, [isSuccess, user, message, router])
-
-	// console.log("session", session)
 
     const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
         try {
+			if (email === "" || password === "") {
+				throw new Error("Please provide a email and password")
+			}
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
-			});
+			}).then(async (res) => {
+				const session = await getSession();
 
-			if (signInData?.error) {
-				console.log('error', signInData)
-			} 
-			console.log("sign", signInData)
-			dispatch(login({
-				user: signInData,
-				isError: false,
-				isSuccess: true,
-				isLoading: false,
-				message: undefined
-			}));
+				console.log("session", session)
+
+				if (!session) throw new Error(`Error: cannot find error`)
+
+				dispatch(login(session as any));
+				return session
+			}).catch((error) => {
+				console.log("error", JSON.stringify(error))
+				// throw new Error(`Error: ${error}`)
+			});
+			
+			
 			// router.push('/');
 			return signInData;
 			// const user = await fetch("/api/login", {
@@ -78,8 +87,9 @@ const SignIn = () => {
 
 			// localStorage.setItem("user", JSON.stringify(user));
 			
-		} catch (error) {
+		} catch (error: any) {
 			console.log("error", error)
+			setError(error)
 			return error;
 		}
         
@@ -103,21 +113,21 @@ const SignIn = () => {
 				<label>Password:</label>
 				<div className="input_Group">
 				<input
-					// type={`${show.password ? "text" : "password"}`}
+					type={`${show.password ? "text" : "password"}`}
 					onChange={(e) => setPassword(e.target.value)}
 					value={password}
 				/>
-				{/* <span
+				<span
 					onClick={() => setShow({ ...show, password: !show.password })}
 				>
-					<InfoIcon size={25} />
-				</span> */}
+					<p>Show Password</p>
+				</span>
 				</div>
 
 				<button onClick={handleSubmit}>
 				Log in
 				</button>
-				{/* {error && <div className="error">{error}</div>} */}
+				{error && <div className="">{error.toString()}</div>}
 			</form>
 
 			<p>
