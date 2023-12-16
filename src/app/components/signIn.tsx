@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { login, selectUserAuth } from "../../app/redux/features/AuthContext";
 import {  redirect, useRouter } from "next/navigation";
+import { User } from "@prisma/client";
+import { useResend } from "../hooks/resend"
 
 
 const SignIn = () => {
@@ -21,7 +23,7 @@ const SignIn = () => {
 	const [verifyEmail, setVerifyEmail] = useState<boolean>(false);
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string | undefined>("");
-	// const { resend, error2, isLoading2 } = useResend();
+	const { resend, error2, isLoading2 } = useResend();
 	const [show, setShow] = useState<any>({ password: false });
 
 	// const loginUser = async (email, password) => {
@@ -57,16 +59,25 @@ const SignIn = () => {
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
 			}).then(async (res) => {
+
+				if (res.ok === false) {
+					console.log("res", res)
+					setError(res.error)
+					if (res.error.includes("Email is not verified")) {
+						setVerifyEmail(true);
+					}
+					throw new Error(res.error)
+				}
+
 				const session = await getSession();
 
-				console.log("session", session)
 
-				if (!session) throw new Error(`Error: cannot find error`)
+				if (!session) throw new Error(`Error: cannot find user`)
 
 				dispatch(login(session as any));
 				return session
 			}).catch((error) => {
-				console.log("error", JSON.stringify(error))
+				console.log("error", error)
 				// throw new Error(`Error: ${error}`)
 			});
 			
@@ -142,7 +153,7 @@ const SignIn = () => {
 				Please click on the Verify Email link in the email registered
 				with.
 				<br />
-				{/* <button onClick={resendEmail}>RESEND EMAIL</button> */}
+				<button onClick={() => resend(email, "resend")}>RESEND EMAIL</button>
 				</div>
 			)}
 			</div>

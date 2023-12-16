@@ -49,7 +49,7 @@ export const options: NextAuthOptions = {
                 }
 
                 if (existingUserByEmail.isVerified == false) {
-                    throw new Error("Email is not verified, Please verify email!")
+                    throw new Error('Email is not verified, Please verify email!')
                     // return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
                 };
 
