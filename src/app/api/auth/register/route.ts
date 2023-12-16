@@ -13,9 +13,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const body = await req.json();
         const { firstName, lastName, email, username, password, isAdmin = false } = body;
 
-        // if (username === ""){
-        //     return NextResponse.json({message:"Please provide a proper email"})
-        // };
         if (username === "") throw new Error("Please provide a username");
         if (email === "") throw new Error("Please provide a email");
         if (!validator.isEmail(email)) throw new Error("Please provide a proper email");
@@ -36,11 +33,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
             where: { email: email }
         });
 
-        if (existingUserByEmail.email === email) {
-            throw Error("Looks like an email is set up with us, try loging in!");            
+        if (existingUserByEmail?.email === email) {
+            throw Error("Looks like an email is set up with us, try logging in!");            
         };
         
-        if (existingUserByEmail.username === username) {
+        if (existingUserByEmail?.username === username) {
             throw Error("Username taken")
         }
 
@@ -91,7 +88,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // await sentVerifyUserEmail(awaitUser.email, fullName, link)
         // return NextResponse.json({ user: awaitUser, message: "User created Successfully"}, { status: 201 });
     } catch (error) {
-        console.log("errorrrrrrrrr testest", error)
         return NextResponse.json({ message: `${error}`}, { status: 500 })
     }
 };
