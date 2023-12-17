@@ -10,6 +10,7 @@ import { login } from "../src/app/redux/features/AuthContext";
 import { compare } from "bcrypt";
 import { User } from "@prisma/client";
 import { NextAuthOptions } from "next-auth";
+import validator from "validator";
 
 export const options: NextAuthOptions = {
     providers: [
@@ -31,6 +32,8 @@ export const options: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     return null
                 }
+
+                if (!validator.isEmail(credentials?.email )) throw new Error("Please provide a proper email");
 
                 const existingUserByEmail = await db.user.findUnique({
                     where: {

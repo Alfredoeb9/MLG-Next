@@ -6,19 +6,17 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
 import { login, selectUserAuth } from "../../app/redux/features/AuthContext";
 import {  redirect, useRouter } from "next/navigation";
-import { User } from "@prisma/client";
 import { useResend } from "../hooks/resend"
 
 
 const SignIn = () => {
-	
 	const dispatch = useAppDispatch()
 	const router = useRouter();
     const [email, setEmail] = useState<string>("");
 	const user = useAppSelector(selectUserAuth);
     const [loading, setLoading] = useState<boolean>(false);
-	const { isSuccess, message } = useSelector((state: { user: any; }) => state.user);
-	const [isVerified, setIsVerified] = useState<boolean>(false);
+	// const { isSuccess, message } = useSelector((state: { user: any; }) => state.user);
+	// const [isVerified, setIsVerified] = useState<boolean>(false);
 	const [spinnerLoading, setSpinnerLoading] = useState<boolean>(false);
 	const [verifyEmail, setVerifyEmail] = useState<boolean>(false);
 	const [password, setPassword] = useState<string>("");
@@ -26,141 +24,117 @@ const SignIn = () => {
 	const { resend, error2, isLoading2 } = useResend();
 	const [show, setShow] = useState<any>({ password: false });
 
-	// const loginUser = async (email, password) => {
-	// 	setSpinnerLoading(true);
-	// 	setError(null);
-
-	// 	const response = await fetch('/api/auth/sign-in')
-	// }
-
 	if (user !== null) {
 		redirect("/")
 	}
-
-	useEffect(() => {
-		console.log("message", message)
-		if (message === "USER_AUTHORIZED") {
-			setIsVerified(true)
-		}
-
-		// if (user !== null) {
-		// 	setSpinnerLoading(true);
-		// 	router.push("/")
-		// }
-	}, [isSuccess, user, message, router])
 
     const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
         try {
 			if (email === "" || password === "") {
-				throw new Error("Please provide a email and password")
+				return setError("Please provide a email and password")
 			}
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
 			}).then(async (res) => {
 
 				if (res.ok === false) {
-					console.log("res", res)
 					setError(res.error)
 					if (res.error.includes("Email is not verified")) {
 						setVerifyEmail(true);
 					}
-					throw new Error(res.error)
+					return null
 				}
 
 				const session = await getSession();
 
-
-				if (!session) throw new Error(`Error: cannot find user`)
+				if (!session) return setError(`Error: cannot find user`)
 
 				dispatch(login(session as any));
 				return session
 			}).catch((error) => {
 				console.log("error", error)
-				// throw new Error(`Error: ${error}`)
+				return setError(error);
 			});
-			
-			
-			// router.push('/');
+		
 			return signInData;
-			// const user = await fetch("/api/login", {
-			// 	method: 'POST',
-			// 	headers: {
-			// 	'Content-Type': 'application-json'
-			// 	},
-			// 	body: JSON.stringify({
-			// 	email: email,
-			// 	password: password,
-			// 	test: "test"
-			// 	})
-			// })
 
 			// localStorage.setItem("user", JSON.stringify(user));
 			
 		} catch (error: any) {
 			console.log("error", error)
-			setError(error)
-			return error;
+			return setError(error)		
 		}
-        
-        
     }
+
+
     return (
-        <div className="login">
-		{ spinnerLoading ? (
-			<p>this is suppose to be a spinner</p>
-		) : (
-			<div className="login__container">
-			<form className="login__form" onSubmit={handleSubmit}>
-				<h3>Log In</h3>
+        <div className="flex min-h-full flex-1 flex-col justify-center w-96 px-6 py-12 lg:px-8">
+			{ isLoading2 || spinnerLoading ? (
+				<p>this is suppose to be a spinner</p>
+			) : (
+				<section className="w-fullrounded-lg px-2.5 shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
+					<h3 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Log In</h3>
+					<form className="space-y-6" onSubmit={handleSubmit}>
+						<div>
+							<label htmlFor="email" className="block text-sm font-medium leading-6 text-white">Email:</label>
+							<input
+								className="block w-full rounded-md border-0 py-1.5 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+								type="email"
+								onChange={(e) => setEmail(e.target.value)}
+								value={email}
+							/>
+						</div>
+						
+						<div>
+							<div className="flex items-center justify-between">
+								<label htmlFor="password" className="block text-sm font-medium leading-6 text-white">Password:</label>
+								<span
+									className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+									onClick={() => setShow({ ...show, password: !show.password })}
+								>
+									<p className="font-semibold text-indigo-600 hover:text-indigo-500">Show Password</p>
+								</span>
+								
+							</div>
+							<input
+								name="password"
+								required
+								type={`${show.password ? "text" : "password"}`}
+								onChange={(e) => setPassword(e.target.value)}
+								value={password}
+								className="block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							/>		
+						</div>
 
-				<label>Email:</label>
-				<input
-				type="email"
-				onChange={(e) => setEmail(e.target.value)}
-				value={email}
-				/>
-				<label>Password:</label>
-				<div className="input_Group">
-				<input
-					type={`${show.password ? "text" : "password"}`}
-					onChange={(e) => setPassword(e.target.value)}
-					value={password}
-				/>
-				<span
-					onClick={() => setShow({ ...show, password: !show.password })}
-				>
-					<p>Show Password</p>
-				</span>
-				</div>
+						<button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500" onClick={handleSubmit} disabled={isLoading2 || email === "" || password === "" || email.length === 0}>
+							Log in
+						</button>
 
-				<button onClick={handleSubmit}>
-				Log in
-				</button>
-				{error && <div className="">{error.toString()}</div>}
-			</form>
+						{error && <div className="text-red-500">{error.toString()}</div>}
+					</form>
 
-			<p>
-				<Link href={"/forgot-password"}>Forgot Password?</Link>
-			</p>
+					<p className="hover:text-white mt-10text-sm text-gray-500">
+						<Link href={"/forgot-password"}>Forgot Password?</Link>
+					</p>
 
-			{verifyEmail && (
-				<div className="login__verify">
-				<span className="login__verify__span">
-					Your email is not verified.
-				</span>
-				Please click on the Verify Email link in the email registered
-				with.
-				<br />
-				<button onClick={() => resend(email, "resend")}>RESEND EMAIL</button>
-				</div>
+					{verifyEmail && (
+						<div className="login__verify">
+							<span className="mt-10 text-center text-sm text-gray-500">
+								Your email is not verified.
+							</span>
+							Please click on the Verify Email link in the email registered
+							with or click resend email to receive a new email.
+							<br />
+							<button className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={() => resend(email, "resend")}>RESEND EMAIL</button>
+						</div>
+					)}
+				</section>
 			)}
-			</div>
-		)}
-		<p>
-			Don't have an account <Link href={"/signup"}>Sign up</Link>
-		</p>
+			<p className="mt-10 text-center text-sm text-white">
+				Don't have an account? <Link className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" href={"/auth/sign-up"}>Sign up</Link>
+			</p>
 		</div>
     )
 }
