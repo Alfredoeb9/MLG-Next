@@ -4,7 +4,7 @@ import { sentVerifyUserEmail } from "../[...nextauth]/mailer";
 import { createToken, emailRegx } from "../../../../../lib/utils/utils";
 
 
-export async function POST(req: Request) {
+export async function POST(req: Request, res: NextResponse) {
   
   const data = await req.json();
 
@@ -14,8 +14,12 @@ export async function POST(req: Request) {
         where: { email: data.email }
       });
 
-      if (!existingUserByEmail?.email) {
-        throw Error("Email is not registred, Please sign up and verify email");            
+      if (existingUserByEmail === null || !existingUserByEmail || existingUserByEmail.email === undefined) {
+        console.log("yes user does not exist")
+        // return NextResponse.json({}, {status: 500, statusText: "Invalid Credentials"})
+        return NextResponse.json({ error: "Email is not registred, Please sign up and verify email"}, { status: 400 })
+        // return new Response(null, {status: 500, statusText: 'Invalid Credentials'})
+        throw new Error("Email is not registred, Please sign up and verify email");            
       };
 
       const token = await createToken(existingUserByEmail.id, existingUserByEmail.isAdmin);
@@ -24,8 +28,8 @@ export async function POST(req: Request) {
       const fullName = existingUserByEmail.firstName + " " + existingUserByEmail.lastName;
       await db.activateToken.create({
           data: {
-          token: token,
-          userId: existingUserByEmail.id
+            token: token,
+            userId: existingUserByEmail.id
         }
       })
 
@@ -33,6 +37,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(existingUserByEmail)
     } catch (error) {
+      console.log("teest", error)
       return NextResponse.json(error)
     }
   } else {
@@ -59,7 +64,7 @@ export async function POST(req: Request) {
         }
       });
   
-      if (!user) return NextResponse.json({ user: null, message: "User does not exist!"})
+      if (!user) throw new Error("User does not exist!")
   
       await db.user.update({
         where: {
@@ -81,6 +86,7 @@ export async function POST(req: Request) {
   
       return NextResponse.json(user);
     } catch (error) {
+      console.log("er", error)
       return NextResponse.json(error);
     }
   }

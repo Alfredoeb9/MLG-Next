@@ -1,6 +1,7 @@
 "use client";
 import { register } from "app/redux/features/AuthContext";
 import { useAppDispatch } from "app/redux/hooks";
+import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
 export default function Regiter() {
@@ -21,14 +22,15 @@ export default function Regiter() {
     
 
     const handleSubmit = async (e: any) => {
-        setError("")
         e.preventDefault();
+        setError("")
+        
 
         if (email === "") return setError("Please provide a proper email");
-        if (password === "") return setError("Please provide a proper email");
-        if (username === "") return setError("Please provide a proper email");
-        if (firstName === "") return setError("Please provide a proper email");
-        if (lastName === "") return setError("Please provide a proper email");
+        if (password === "") return setError("Please provide a proper password");
+        if (username === "") return setError("Please provide a proper username");
+        if (firstName === "") return setError("Please provide a proper first name");
+        if (lastName === "") return setError("Please provide a proper last name");
     
         const user = {
           username,
@@ -42,7 +44,7 @@ export default function Regiter() {
             const data = await fetch("/api/auth/register", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application-json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(user)
             })
@@ -54,10 +56,11 @@ export default function Regiter() {
                 setError(error.message)
             }
 
-            const registeredUser = await data.json()
+            const response = await data.json()
 
             dispatch(register());
-            return registeredUser
+            // redirect('/auth/sign-in')
+            return response
         } catch (error) {
             console.log("errorrrrrrrrr catch", JSON.stringify(error))
             // console.log("errorrrrrrrrr", error)

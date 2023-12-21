@@ -20,13 +20,20 @@ const SignIn = () => {
 	const [spinnerLoading, setSpinnerLoading] = useState<boolean>(false);
 	const [verifyEmail, setVerifyEmail] = useState<boolean>(false);
 	const [password, setPassword] = useState<string>("");
-	const [error, setError] = useState<string | undefined>("");
+	const [error, setError] = useState<string | any>("");
 	const { resend, error2, isLoading2 } = useResend();
 	const [show, setShow] = useState<any>({ password: false });
 
 	if (user !== null) {
 		redirect("/")
 	}
+	
+	useEffect(() => {
+		if (error2) {	
+			// setVerifyEmail(false)		
+			setError(error2)
+		}
+	}, [resend, error2])
 
     const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -38,10 +45,13 @@ const SignIn = () => {
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
 			}).then(async (res) => {
+				setVerifyEmail(false);
+				if (!res) return null;
 
-				if (res.ok === false) {
-					setError(res.error)
-					if (res.error.includes("Email is not verified")) {
+				if (res?.ok === false) {
+					if (!res.error) return null
+					setError(res?.error)
+					if (res?.error.includes("Email is not verified")) {
 						setVerifyEmail(true);
 					}
 					return null
@@ -51,10 +61,13 @@ const SignIn = () => {
 
 				if (!session) return setError(`Error: cannot find user`)
 
+				setError("");
+				setVerifyEmail(false);
 				dispatch(login(session as any));
 				return session
 			}).catch((error) => {
-				console.log("error", error)
+				
+				// console.log("error", JSON.stringify)
 				return setError(error);
 			});
 		
@@ -63,11 +76,29 @@ const SignIn = () => {
 			// localStorage.setItem("user", JSON.stringify(user));
 			
 		} catch (error: any) {
-			console.log("error", error)
+			console.log("error2", error)
 			return setError(error)		
 		}
     }
 
+	const resendEmail = async (e: any) => {
+		e.preventDefault()
+		try {
+			console.log("sending")
+		  await resend(e, email, "resend");
+		  // const resend = await authAPI.resendVerifyEmail(email);
+		  // console.log(resend);
+		  // return resend;
+		} catch (error) {
+			setError(error)
+			console.log("error signin", error)
+		//   if (error?.response && error?.response?.data && error?.response.data.message)
+		// 	console.log(error);
+		//   else {
+		// 	console.log(error);
+		//   }
+		}
+	  };
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center w-96 px-6 py-12 lg:px-8">
@@ -115,19 +146,16 @@ const SignIn = () => {
 						{error && <div className="text-red-500">{error.toString()}</div>}
 					</form>
 
-					<p className="hover:text-white mt-10text-sm text-gray-500">
+					<p className="hover:text-white mt-10text-sm text-white">
 						<Link href={"/forgot-password"}>Forgot Password?</Link>
 					</p>
 
 					{verifyEmail && (
-						<div className="login__verify">
-							<span className="mt-10 text-center text-sm text-gray-500">
-								Your email is not verified.
-							</span>
-							Please click on the Verify Email link in the email registered
+						<div className="mt-10 text-center text-sm text-white">
+							Your email is not verified. Please click on the Verify Email link in the email registered
 							with or click resend email to receive a new email.
 							<br />
-							<button className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={() => resend(email, "resend")}>RESEND EMAIL</button>
+							<button className="px-3 py-1.5 mt-2 font-semibold leading-6 bg-indigo-600 text-white rounded-md hover:text-indigo-500" onClick={resendEmail}>RESEND EMAIL</button>
 						</div>
 					)}
 				</section>

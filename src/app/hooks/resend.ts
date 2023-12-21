@@ -8,7 +8,8 @@ export const useResend = () => {
   const [error2, setError] = useState<any>(null);
   const [isLoading2, setIsLoading] = useState<boolean>(false);
 
-  const resend = async (email: string, path: string) => {
+  const resend = async (e: any, email: string, path: string) => {
+    e.preventDefault();
     setIsLoading(true);
     setError(null);
 
@@ -24,6 +25,7 @@ export const useResend = () => {
     const json = await response.json();
 
     if (!response.ok) {
+      console.log("error33", json.error)
       setIsLoading(false);
       setError(json.error);
     }

@@ -30,7 +30,7 @@ export const options: NextAuthOptions = {
             async authorize(credentials) {
                 // Add logic here to look up the user from the credentials supplied
                 if (!credentials?.email || !credentials?.password) {
-                    return null
+                    throw new Error("Email and or password is not registered");
                 }
 
                 if (!validator.isEmail(credentials?.email )) throw new Error("Please provide a proper email");
@@ -42,13 +42,13 @@ export const options: NextAuthOptions = {
                 });
                 
                 if (!existingUserByEmail){
-                    return null;
+                    throw new Error("Email and or password is not registered");
                 }
 
                 const passwordMatch = await compare(credentials.password, existingUserByEmail.password);
 
                 if (!passwordMatch) {
-                    return null;
+                    throw new Error("Email and or password is not registered");
                 }
 
                 if (existingUserByEmail.isVerified == false) {
