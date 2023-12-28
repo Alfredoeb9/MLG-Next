@@ -13,7 +13,7 @@ const SignIn = () => {
 	const dispatch = useAppDispatch()
 	const router = useRouter();
     const [email, setEmail] = useState<string>("");
-	const user = useAppSelector(selectUserAuth);
+	const user = useAppSelector(state => state.authXReducer.user);
     const [loading, setLoading] = useState<boolean>(false);
 	// const { isSuccess, message } = useSelector((state: { user: any; }) => state.user);
 	// const [isVerified, setIsVerified] = useState<boolean>(false);
@@ -24,7 +24,7 @@ const SignIn = () => {
 	const { resend, error2, isLoading2 } = useResend();
 	const [show, setShow] = useState<any>({ password: false });
 
-	if (user !== null) {
+	if (user.user !== null) {
 		redirect("/")
 	}
 	
@@ -66,8 +66,6 @@ const SignIn = () => {
 				dispatch(login(session as any));
 				return session
 			}).catch((error) => {
-				
-				// console.log("error", JSON.stringify)
 				return setError(error);
 			});
 		
@@ -85,7 +83,7 @@ const SignIn = () => {
 		e.preventDefault()
 		try {
 			console.log("sending")
-		  await resend(e, email, "resend");
+		  	await resend(e, email, "resend");
 		  // const resend = await authAPI.resendVerifyEmail(email);
 		  // console.log(resend);
 		  // return resend;
@@ -98,14 +96,14 @@ const SignIn = () => {
 		// 	console.log(error);
 		//   }
 		}
-	  };
+	};
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center w-96 px-6 py-12 lg:px-8">
 			{ isLoading2 || spinnerLoading ? (
 				<p>this is suppose to be a spinner</p>
 			) : (
-				<section className="w-fullrounded-lg px-2.5 shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
+				<section className="w-full rounded-lg px-2.5 shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
 					<h3 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Log In</h3>
 					<form className="space-y-6" onSubmit={handleSubmit}>
 						<div>
@@ -139,7 +137,10 @@ const SignIn = () => {
 							/>		
 						</div>
 
-						<button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500" onClick={handleSubmit} disabled={isLoading2 || email === "" || password === "" || email.length === 0}>
+						<button 
+							className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500" 
+							disabled={isLoading2 || email === "" || password === "" || email.length === 0}
+						>
 							Log in
 						</button>
 
@@ -147,7 +148,7 @@ const SignIn = () => {
 					</form>
 
 					<p className="hover:text-white mt-10text-sm text-white">
-						<Link href={"/forgot-password"}>Forgot Password?</Link>
+						<Link href={"/auth/forgot-password"}>Forgot Password?</Link>
 					</p>
 
 					{verifyEmail && (

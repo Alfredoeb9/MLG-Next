@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import db from "../../../../lib/db";
 import bcrypt from "bcrypt";
-// import validator from "validator"
 import { createToken, emailRegx } from "../../../../../lib/utils/utils";
-import { registerUser } from "../../models/userModels";
 import { sentVerifyUserEmail } from "../[...nextauth]/mailer";
 import db from '../../../../../lib/db';
 import validator from 'validator';
 
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const body = await req.json();
         const { firstName, lastName, email, username, password, isAdmin = false } = body;
 
@@ -36,9 +33,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         if (existingUserByEmail?.email === email) {
             throw Error("Looks like an email is set up with us, try logging in!");            
         };
-        
-        if (existingUserByEmail?.username === username) {
-            throw Error("Username taken")
+
+        const existingUserByUsername = await db.user.findUnique({
+            where: {
+                username: username
+            }
+        })
+
+        if (existingUserByUsername?.username === username) {
+            throw Error("Username is taken")
         }
 
         const salt = await bcrypt.genSalt();

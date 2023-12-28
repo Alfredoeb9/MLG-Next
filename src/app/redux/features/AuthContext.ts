@@ -92,7 +92,7 @@ export const userAuthSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    login: (state, action: PayloadAction<UserAuthProps>) => {
+    login: (state: UserAuthProps, action: PayloadAction<UserAuthProps>) => {
       state.user = action.payload;
       state.isError = false;
       state.isSuccess = true;
@@ -100,14 +100,14 @@ export const userAuthSlice = createSlice({
       state.message = "USER_SIGNED_IN";
     },
 
-    logout: (state) => {
+    logout: (state: UserAuthProps) => {
       state.user = null;
       // state.isError = false;
       // state.isSuccess = false;
       // state.isLoading = false;
       // state.message = "";
     },
-    verifyEmail: (state, action) => {
+    verifyEmail: (state: UserAuthProps) => {
       state.isLoading = false;
       state.isSuccess = true;
       state.message = "USER_AUTHORIZED";
@@ -119,13 +119,14 @@ export const userAuthSlice = createSlice({
       state.message = "USER_REGISTERED";
       // state.user = action.payload;
     },
-    updateUser: (state, action: PayloadAction<any>) => {
+    updateUser: (state: UserAuthProps, action: PayloadAction<any>) => {
       // console.log(state.workout);
       // console.log(action.payload);
       // state.workout = state.workout.filter(
       //   (workout) => workout._id !== action.payload._id
       // );
       state.user = action.payload;
+      state.message = "USER_SIGNED_IN";
     },
     // extraReducers: (builder) => {
     //   builder

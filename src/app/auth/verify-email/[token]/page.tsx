@@ -36,7 +36,7 @@ export default function VerifyEmail() {
       })
 
       if (verify.ok) {
-        dispatch(verifyEmail(verify));
+        dispatch(verifyEmail());
         setIsSuccess(true);
         setIsLoading(false);
         return verify;

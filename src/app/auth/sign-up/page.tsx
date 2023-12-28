@@ -14,7 +14,8 @@ export default function Regiter() {
     const [username, setUsername] = useState<string>("");
     const [isVerified, setIsVerified] = useState<boolean>(false);
     const [spinnerLoading, setSpinnerLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<string | any>("");
+    const [show, setShow] = useState<any>({ password: false });
     // const { signup, error, isLoading } = useSignup();
     // const { resend, error2, isLoading2 } = useResend();
     // const user = useSelector(selectUserAuth);
@@ -52,7 +53,8 @@ export default function Regiter() {
             if (!data.ok) {
                 
                 let error = await data.json();
-                console.log("errorr if block", JSON.stringify(error))
+                // console.log("error", error)
+                // console.log("errorr if block", JSON.stringify(error))
                 setError(error.message)
             }
 
@@ -62,86 +64,79 @@ export default function Regiter() {
             // redirect('/auth/sign-in')
             return response
         } catch (error) {
-            console.log("errorrrrrrrrr catch", JSON.stringify(error))
-            // console.log("errorrrrrrrrr", error)
+            console.log("errorrrrrrrrr catch", error)
+            return error
         }
-    
-        
-    
-        // await signup(user);
     };
-    
+
     return (
-        <div>
+        <div className="flex bg-stone-900 min-h-screen flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             {isVerified ? (
                 <div>This is a loadeer</div>
             ) : (
-                <>
-                    {!isVerified ? (
-                        <form className="signup" onSubmit={handleSubmit}>
-                            <h3>Sign up</h3>
+                <div className="flex min-h-full flex-1 flex-col justify-center w-96 px-6 py-12 lg:px-8">
+                    <form className="signup" onSubmit={handleSubmit}>
+                        <h3 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Sign up</h3>
 
-                            <label>Email:</label>
-                            <input
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                            />
+                        <label className="block text-sm font-medium leading-6 text-white">Email:</label>
+                        <input
+                            className="block w-full rounded-md border-0 py-1.5 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            type="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                        />
 
-                            <label>Password:</label>
-                            <input
-                                type="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                value={password}
-                            />
-
-                            <label>Username:</label>
-                            <input
-                                type="name"
-                                onChange={(e) => setUsername(e.target.value)}
-                                value={username}
-                            />
-
-                            <label>First Name:</label>
-                            <input
-                                type="name"
-                                onChange={(e) => setFirstName(e.target.value)}
-                                value={firstName}
-                            />
-
-                            <label>Last Name:</label>
-                            <input
-                                type="name"
-                                onChange={(e) => setLastName(e.target.value)}
-                                value={lastName}
-                            />
-
-                            <button >Sign Up</button>
-
-                            {error && <div className="error">{error}</div>}
-                        </form>
-                    ) : (
-                        <div className="reverify">
-                            <div className="reverify__container">
-                                We have sent a verification email to{" "}
-                                <span className="reverify__email">{email}</span>. <br />
-                                Click on the link in the email to verify your account.
-                            </div>
-                            <button
-                                // disabled={isLoading2}
-                                className="reviery__resendBtn"
-                                // onClick={resendEmail}
+                        <div className="flex items-center justify-between">
+                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">Password:</label>
+                            <span
+                                className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+                                onClick={() => setShow({ ...show, password: !show.password })}
                             >
-                                Resend Email
-                            </button>
-
-                            {/* {error2 && <div className="error">{error2}</div>} */}
-                                {/* <div className="text-gray-600 py-8 text-sm">
-                                <a onClick={resendEmail}>Resend Email</a>
-                            </div> */}
+                                <p className="font-semibold text-indigo-600 hover:text-indigo-500">Show Password</p>
+                            </span>
+                            
                         </div>
-                    )}
-                </>
+                        <input
+                            className="block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            type={`${show.password ? "text" : "password"}`}
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                        />
+
+                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-white">Username:</label>
+                        <input
+                            className="block w-full rounded-md border-0 py-1.5 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            type="name"
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={username}
+                        />
+
+                        <label htmlFor="fist name" className="block text-sm font-medium leading-6 text-white">First Name:</label>
+                        <input
+                            className="block w-full rounded-md border-0 py-1.5 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            type="name"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstName}
+                        />
+
+                        <label htmlFor="last name" className="block text-sm font-medium leading-6 text-white">Last Name:</label>
+                        <input
+                            className="block w-full rounded-md border-0 py-1.5 mt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            type="name"
+                            onChange={(e) => setLastName(e.target.value)}
+                            value={lastName}
+                        />
+
+                        <button
+                            disabled={email.length === 0 || username.length === 0 || firstName.length === 0 || lastName.length === 0 || password.length === 0}
+                            className="flex w-full justify-center rounded-md mt-4 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500"
+                        >
+                            Sign Up
+                        </button>
+
+                        {error && <div className="text-red-500">{error.toString()}</div>}
+                    </form>
+                </div>
             )}
         </div>
     )

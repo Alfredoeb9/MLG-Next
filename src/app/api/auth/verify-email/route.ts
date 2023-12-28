@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import db from "../../../../../lib/db";
 import { sentVerifyUserEmail } from "../[...nextauth]/mailer";
-import { createToken, emailRegx } from "../../../../../lib/utils/utils";
+import { createToken } from "../../../../../lib/utils/utils";
 
 
 export async function POST(req: Request, res: NextResponse) {
@@ -15,8 +15,6 @@ export async function POST(req: Request, res: NextResponse) {
       });
 
       if (existingUserByEmail === null || !existingUserByEmail || existingUserByEmail.email === undefined) {
-        console.log("yes user does not exist")
-        // return NextResponse.json({}, {status: 500, statusText: "Invalid Credentials"})
         return NextResponse.json({ error: "Email is not registred, Please sign up and verify email"}, { status: 400 })
         // return new Response(null, {status: 500, statusText: 'Invalid Credentials'})
         throw new Error("Email is not registred, Please sign up and verify email");            
@@ -37,7 +35,6 @@ export async function POST(req: Request, res: NextResponse) {
 
     return NextResponse.json(existingUserByEmail)
     } catch (error) {
-      console.log("teest", error)
       return NextResponse.json(error)
     }
   } else {
@@ -86,7 +83,6 @@ export async function POST(req: Request, res: NextResponse) {
   
       return NextResponse.json(user);
     } catch (error) {
-      console.log("er", error)
       return NextResponse.json(error);
     }
   }
