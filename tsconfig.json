@@ -3,23 +3,26 @@
     ".eslintrc.json",
     ".prettierrc",
     ".next/types/**/*.ts",
-    "src/types"
+    "src/types",
+    "."
   ],
   "compilerOptions": {
     /* LANGUAGE COMPILATION OPTIONS */
     "target": "ES2020",
-    "baseUrl": "src",
+    "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"],
-      "lib/*": ["lib/*"]
+      "@/src/*": ["src/*"],
+      "@/lib/*": ["lib/*"],
+      "@/components/*": ["src/app/components/*"],
+      "@/redux/*": ["src/app/redux/*"]
     },
     "lib": [
       "DOM",
       "DOM.Iterable",
       "ES2020"
     ],
-    "module": "Node16",
-    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
@@ -58,7 +61,7 @@
     "useDefineForClassFields": true,
     "incremental": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "plugins": [
       {
         "name": "next"
