@@ -2,7 +2,7 @@
 import { register } from "app/redux/features/AuthContext";
 import { useAppDispatch } from "app/redux/hooks";
 import { redirect } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Regiter() {
     // const navigate = useNavigate();
@@ -53,18 +53,14 @@ export default function Regiter() {
             if (!data.ok) {
                 
                 let error = await data.json();
-                // console.log("error", error)
-                // console.log("errorr if block", JSON.stringify(error))
                 setError(error.message)
             }
 
-            const response = await data.json()
+            await data.json()
 
             dispatch(register());
-            // redirect('/auth/sign-in')
-            return response
+            redirect('/auth/sign-in')
         } catch (error) {
-            console.log("errorrrrrrrrr catch", error)
             return error
         }
     };

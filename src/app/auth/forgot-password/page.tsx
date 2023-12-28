@@ -59,7 +59,7 @@ export default function ForgotPassword() {
             }, 10000)
         ]
         
-    }, [message])
+    }, [message, router])
 
 
     return (
