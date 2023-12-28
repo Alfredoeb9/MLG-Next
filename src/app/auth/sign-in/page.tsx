@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import SignIn from "../../components/signIn";
+import SignIn from "@/components/signIn";
 
 export default async function SignInPage() {
     

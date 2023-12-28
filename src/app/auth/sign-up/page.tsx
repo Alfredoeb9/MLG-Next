@@ -1,6 +1,6 @@
 "use client";
-import { register } from "app/redux/features/AuthContext";
-import { useAppDispatch } from "app/redux/hooks";
+import { register } from "@/redux/features/AuthContext";
+import { useAppDispatch } from "@/redux/hooks";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

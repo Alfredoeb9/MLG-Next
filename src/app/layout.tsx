@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import React from 'react'
-import Header from "./components/header"
-import Provider from "./components/Provider"
+import Header from "@/components/header"
+import Provider from "@/components/Provider"
 import { getServerSession } from 'next-auth'
-import { options } from '../../lib/auth'
-import ReduxProvider from "./components/ReduxProvider"
-import AppLogout from "./components/AppLogout"
+import { options } from '@/lib/auth'
+import ReduxProvider from "@/components/ReduxProvider"
+import AppLogout from "@/components/AppLogout"
 
 const inter = Inter({ subsets: ['latin'] })
 

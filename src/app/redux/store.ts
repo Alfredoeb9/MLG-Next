@@ -10,7 +10,7 @@ import {
   setCookie,
   getCookie,
   removeCookie,
-} from "../../../lib/utils/helperAuth";
+} from "@/lib/utils/helperAuth";
 import { composeWithDevTools } from "redux-devtools-extension";
 // import resultSlice from "./features/resultSlice";
 

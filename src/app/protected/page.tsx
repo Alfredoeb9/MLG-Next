@@ -1,7 +1,7 @@
 import React from "react";
 import { getServerSession } from "next-auth";
-import AccessDenied from "../components/access-denied";
-import { options } from "../../../lib/auth";
+import AccessDenied from "@/components/access-denied";
+import { options } from "@/lib/auth";
 
 const Protected = async () => {
     const session = await getServerSession(options);

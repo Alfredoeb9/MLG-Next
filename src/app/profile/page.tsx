@@ -1,9 +1,9 @@
 "use client";
 import React from 'react'
-import { useAppSelector } from '../redux/hooks';
-import { selectUserAuth } from '../redux/features/AuthContext';
-import { getServerSession } from 'next-auth';
-import { options } from '../../../lib/auth';
+// import { useAppSelector } from '@/redux/hooks';
+// import { selectUserAuth } from '@/redux/features/AuthContext';
+// import { getServerSession } from 'next-auth';
+// import { options } from '@/lib/auth';
 import { useSession } from 'next-auth/react';
 
 export default function Profile() {

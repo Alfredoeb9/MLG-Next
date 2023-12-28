@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { redirect, useParams } from "next/navigation";
 import Link from "next/link";
-import {useAppDispatch} from "../../../redux/hooks"
-import authAPI from "../../../redux/api/authAPI";
-import { verifyEmail } from "../../../redux/features/AuthContext";
+import {useAppDispatch} from "@/redux/hooks"
+// import authAPI from "@/redux/api/authAPI";
+import { verifyEmail } from "@/redux/features/AuthContext";
 // import {handler} from "../../../../../lib/auth"
 // // import authAPI from "../../app/api/authApi";
 // // import { verifyEmail } from "../../app/features/AuthContext";

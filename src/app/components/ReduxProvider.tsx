@@ -1,9 +1,9 @@
 'use client'
 import React, { useRef } from 'react'
 import { Provider, useDispatch } from 'react-redux'
-import { AppStore, makeStore, store } from '../redux/store'
-import { useSession } from 'next-auth/react'
-import { updateUser } from 'app/redux/features/AuthContext'
+import { AppStore, makeStore, store } from '@/redux/store'
+// import { useSession } from 'next-auth/react'
+import { updateUser } from '@/redux/features/AuthContext'
 
 
 export default function ReduxProvider({

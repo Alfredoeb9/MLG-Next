@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { verifyEmail } from "../redux/features/AuthContext";
+import { verifyEmail } from "@/redux/features/AuthContext";
 
 export const useResend = () => {
   const dispatch = useDispatch();

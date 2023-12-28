@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "../../app/redux/hooks";
-import { login, selectUserAuth } from "../../app/redux/features/AuthContext";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { login, selectUserAuth } from "@/redux/features/AuthContext";
 import {  redirect, useRouter } from "next/navigation";
 import { useResend } from "../hooks/resend"
 

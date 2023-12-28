@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     
     console.log(pathname)
     console.log(searchParams)
-    let cookie = request.cookies.get('next-auth.session-token')?.value
+    let cookie = request.cookies.get('next-auth.csrf-token')?.value
 
     console.log('cookie', cookie)
     const allCookies = request.cookies.getAll()
