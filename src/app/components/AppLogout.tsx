@@ -1,5 +1,7 @@
 'use client';
-import { signOut } from "next-auth/react";
+import { options } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -16,7 +18,8 @@ const AppLogout = ({ children }: {children: React.ReactNode}) => {
     const [loadModal, setLoadModal] = useState<boolean>(false);
     const router = useRouter()
     let timer: string | number | NodeJS.Timeout | undefined;
-  
+
+    // console.log("session app logout", session)
     // this function sets the timer that logs out the user after 10 secs
     const handleLogoutTimer = () => {
         setLoadModal(true);

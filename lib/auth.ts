@@ -58,7 +58,7 @@ export const options: NextAuthOptions = {
 
                 // localStorage.setItem("user", JSON.stringify(existingUserByEmail));
                 // dispatch(login(existingUserByEmail));
-                
+                console.log("passing")
                 return {
                     id: `${existingUserByEmail.id}`,
                     username: existingUserByEmail.username,

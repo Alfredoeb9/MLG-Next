@@ -70,7 +70,14 @@ export default function ResetPassword() {
                             </span>
                         </div>
                         
-                        <input className='block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6' required name='password' type={`${show.password ? "text" : "password"}`} value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
+                        <input 
+                            className='block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6' 
+                            required 
+                            name='password' 
+                            type={`${show.password ? "text" : "password"}`} 
+                            value={oldPassword} 
+                            onChange={(e) => setOldPassword(e.target.value)}
+                        />
                     </div>
                     
                     <div>
@@ -99,11 +106,20 @@ export default function ResetPassword() {
                             </span>
                         </div>
                         
-                        <input className='block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6' required name='password' type={`${show3.password ? "text" : "password"}`} value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)}/>
+                        <input 
+                            className='block w-full rounded-md border-0 mt-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6' 
+                            required name='password' 
+                            type={`${show3.password ? "text" : "password"}`} 
+                            value={confirmNewPassword} 
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        />
                     </div>
                     
                 
-                    <button className='flex w-full justify-center rounded-md mt-2 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500' disabled={isLoading}>
+                    <button 
+                        className='flex w-full justify-center rounded-md mt-2 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-500' 
+                        disabled={isLoading}
+                    >
                         Update Password
                     </button>
 

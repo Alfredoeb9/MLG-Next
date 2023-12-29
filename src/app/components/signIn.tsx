@@ -45,10 +45,12 @@ const SignIn = () => {
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
 			}).then(async (res) => {
+				console.log("false")
 				setVerifyEmail(false);
 				if (!res) return null;
 
 				if (res?.ok === false) {
+					console.log("false")
 					if (!res.error) return null
 					setError(res?.error)
 					if (res?.error.includes("Email is not verified")) {
@@ -66,6 +68,7 @@ const SignIn = () => {
 				dispatch(login(session as any));
 				return session
 			}).catch((error) => {
+				console.log("error", error)
 				return setError(error);
 			});
 		
