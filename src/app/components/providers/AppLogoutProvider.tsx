@@ -14,7 +14,7 @@ const events = [
     "keypress",
 ];
   
-const AppLogout = ({ children }: {children: React.ReactNode}) => {
+const AppLogoutProvider = ({ children }: {children: React.ReactNode}) => {
     const [loadModal, setLoadModal] = useState<boolean>(false);
     const router = useRouter()
     let timer: string | number | NodeJS.Timeout | undefined;
@@ -68,4 +68,4 @@ const AppLogout = ({ children }: {children: React.ReactNode}) => {
     return [children, loadModal];
 };
   
-export default AppLogout;
+export default AppLogoutProvider;

@@ -3,11 +3,12 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import React from 'react'
 import Header from "@/components/header"
-import Provider from "@/components/Provider"
+import Provider from "@/src/app/components/providers/Provider"
 import { getServerSession } from 'next-auth'
 import { options } from '@/lib/auth'
-import ReduxProvider from "@/components/ReduxProvider"
-import AppLogout from "@/components/AppLogout"
+import ReduxProvider from "@/src/app/components/providers/ReduxProvider"
+import AppLogoutProvider from "@/src/app/components/providers/AppLogoutProvider"
+import { NextUIProviders } from '@/src/app/components/providers/NextUIProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,20 +27,16 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <StoreProvider> */}
-        <AppLogout>
-          <Provider>
-              <Header />
-              <ReduxProvider user={session?.user}>
-                {children}
-              </ReduxProvider>
-            </Provider>
-
-        </AppLogout>
-          
-          
-          
-        {/* </StoreProvider> */}
+        <NextUIProviders>
+          <AppLogoutProvider>
+            <Provider>
+                <Header />
+                <ReduxProvider user={session?.user}>
+                  {children}
+                </ReduxProvider>
+              </Provider>
+          </AppLogoutProvider>
+        </NextUIProviders>
       </body>
     </html>
   )
