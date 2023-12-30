@@ -7,6 +7,9 @@ import { useAppSelector } from '@/redux/hooks';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import LoginBanner from '@/components/LoginBanner';
+import HomeFeaturedGames from '@/src/app/components/home/HomeFeaturedGames';
+import HomeMatchFinder from '@/components/home/HomeMatchFinder';
 
 const data: string[] = [
   'entry 1',
@@ -33,7 +36,7 @@ export default function Home() {
   // console.log("user====", user)
   
   return (
-    <main className=" bg-black ">
+    <main className=" bg-slate-950">
       <section className='flex min-h-128 flex-col items-start justify-center place-content-center m-auto max-w-7xl px-10'>
         <div className='flex flex-row place-content-start max-h-full'>
           <div className="bg-red-400 h-52 w-2 mr-4" />
@@ -42,38 +45,22 @@ export default function Home() {
             <h1 className='text-5xl	text-gray-400'>COMPETE FOR CASH.</h1>
             <h1 className='text-5xl	text-gray-400'>COMPETE FOR ...</h1>
 
-            <button
-              className="text-center mt-6 py-4 px-12 border-2 border-slate-300 text-white text-lg hover:scale-105 hover:border-slate-200 transition-all"
-              onClick={() => {
-                router.push("/auth/sign-up")
-              }}
+            <Link 
+              href={"/auth/sign-up"}
+              className="inline-block text-center mt-6 py-4 px-12 border-2 border-slate-300 text-white text-lg hover:scale-105 hover:border-slate-200 transition-all"
             >
               JOIN MLG
-            </button>
+            </Link>
           </div>
         </div>
       </section>
       
       
-      <section className='flex flex-col m-auto max-w-7xl px-10'>
-        <div className='flex flex-row'>
-          <div className="bg-red-400 h-10 w-2 mr-4" />
-          <div>
-            <h2 className='text-xl text-white'>GAMES</h2>
-            <p className='text-white'>Select a game and then choose how you want to play.</p>
-            <div className='flex flex-row'>
-              {data.slice(0,4).map((set: string, i: number) => (
-                <Link href={"/cross-platform/tournaments"} key={i} className="border-2 border-slate-500 h-20 text-white">
-                  {set}
-                </Link>
-              ))}
-              <Link href={"/tournaments"} className="border-2 border-slate-500 h-20 text-white">
-                SEE ALL GAMES
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HomeFeaturedGames data={data} />
+
+      <LoginBanner />
+
+      <HomeMatchFinder />
     </main>
   )
 }
