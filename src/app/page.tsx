@@ -10,6 +10,7 @@ import Link from 'next/link';
 import LoginBanner from '@/components/LoginBanner';
 import HomeFeaturedGames from '@/src/app/components/home/HomeFeaturedGames';
 import HomeMatchFinder from '@/components/home/HomeMatchFinder';
+import Footer from '@/components/Footer';
 
 const data: string[] = [
   'entry 1',
@@ -61,6 +62,8 @@ export default function Home() {
       <LoginBanner />
 
       <HomeMatchFinder />
+
+      <Footer />
     </main>
   )
 }

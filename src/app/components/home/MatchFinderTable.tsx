@@ -23,6 +23,7 @@ import {
   } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
 import { columns } from "@/lib/Users";
+import Link from "next/link";
 
 
 interface MatchListProps {
@@ -54,17 +55,18 @@ interface MatchFinderInfoProps {
 
 const statusColorMap: Record<string, ChipProps["color"]>  = {
     "available now": "success",
-    "not available": "danger",
-    vacation: "warning",
+    "not available": "danger"
 };
 
 export const MatchFinderTable = ({data}: MatchListProps) => {
     type User = typeof data[0];
     
-    const [openModal, setOpenModal] = useState<boolean>(false);
-    const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [page, setPage] = useState(1);
+    // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
+    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+    const [page, setPage] = useState<number>(1);
+    const [currentSet, setCurrentSet] = useState<number[]>([0,0])
+
+    
 
     // const filteredItems = useMemo(() => {
     //     let filteredUsers = [...data];
@@ -86,6 +88,8 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
     const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
+
+        setCurrentSet([start, end])
     
         return data.slice(start, end);
       }, [page, data, rowsPerPage]);
@@ -95,14 +99,14 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
 
     const onNextPage = useCallback(() => {
         if (page < pages) {
-          setPage(page + 1);
+            setPage(page + 1);
         }
     }, [page, pages]);
 
     const onPreviousPage = useCallback(() => {
-    if (page > 1) {
-        setPage(page - 1);
-    }
+        if (page > 1) {
+            setPage(page - 1);
+        }
     }, [page]);
 
     const renderToolTip = ((data: any) => {
@@ -128,144 +132,91 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         const cellValue = user[columnKey as keyof User];
     
         switch (columnKey) {
-          case "game":
-            return (
-                <div>
-                    <Avatar
-                        // size="lg"
-                        // avatarProps={{radius: "full", size: "sm", src: ""}}
-                        // classNames={"text-default-500"}
-                        // description={user.game}
-                        name={user.game}
-                    />
-                </div>
-              
-            );
-          case "platform":
-            return (
-              <div className="flex flex-col">
-                <p className="text-bold text-small capitalize">{user.platform}</p>
-                {/* <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p> */}
-              </div>
-            );
-          case "starting":
-            return (
-              <Chip
-                className="capitalize border-none gap-1 text-default-600"
-                color={statusColorMap[user.starting]}
-                size="sm"
-                variant="dot"
-              >
-                {user.starting}
-              </Chip>
-            );
-          case "rules":
-            return (
-              <div className="relative flex justify-end items-center gap-2">
-                <Tooltip content={renderToolTip(user.rules[0])}>
-                    <Button>i</Button>
-                </Tooltip>
-              </div>
-            );
-          default:
-            return cellValue;
+            case "game":
+                return (
+                    <div>
+                        <Avatar
+                            // size="lg"
+                            // avatarProps={{radius: "full", size: "sm", src: ""}}
+                            // classNames={"text-default-500"}
+                            // description={user.game}
+                            name={user.game}
+                        />
+                    </div>
+                
+                );
+            case "platform":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-small capitalize">{user.platform}</p>
+                    </div>
+                );
+            case "starting":
+                return (
+                    <Chip
+                        className="capitalize border-none gap-1 text-default-600"
+                        color={statusColorMap[user.starting]}
+                        size="sm"
+                        variant="dot"
+                    >
+                        {user.starting}
+                    </Chip>
+                );
+            case "rules":
+                return (
+                    <div className="relative flex justify-center items-center gap-2">
+                        <Tooltip content={renderToolTip(user.rules[0])}>
+                            <button className="text-center bg-gray-400 px-2 py-1 rounded-full">i</button>
+                        </Tooltip>
+                    </div>
+                );
+            case "link":
+                return (
+                    <div className="flex">
+                        <Button className="bg-green-600"><Link href={`/tournaments/${user.link}`}>Accept</Link></Button>
+                    </div>
+                );
+            default:
+                return cellValue;
         }
-      }, []);
+    }, []);
 
-      const bottomContent = useMemo(() => {
+    const bottomContent = useMemo(() => {
         return (
-          <div className="py-2 px-2 flex justify-between items-center">
-            {/* <span className="w-[30%] text-small text-default-400">
-              {selectedKeys === "all"
-                ? "All items selected"
-                : `${selectedKeys.size} of ${filteredItems.length} selected`}
-            </span>
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={setPage}
-            /> */}
-            <div className="hidden sm:flex w-[30%] justify-end gap-2">
-              <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
-                Previous
-              </Button>
-              <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
-                Next
-              </Button>
+            <div className="py-2 px-2 block items-center">
+                <div className="flex justify-between">
+                    <p>{currentSet[0]} out of {data.length} cash matches</p>
+                    <div className="flex gap-2">
+                        <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+                            Previous
+                        </Button>
+                        <Button isDisabled={pages === 1} size="sm" variant="solid" onPress={onNextPage}>
+                            Next
+                        </Button>
+                    </div>
+                    
+                </div>
             </div>
-          </div>
         );
-      }, [selectedKeys, data.length, page, pages]);
-
-      console.log("data", data.length)
+    }, [ items.length, page, pages, currentSet]);
 
     return (
-
         <Table 
             className="text-black " 
-            aria-label="Example table with dynamic content" 
+            aria-label="Cash Match Finder" 
             bottomContent={bottomContent}
-            onSelectionChange={setSelectedKeys}
+            // onSelectionChange={setSelectedKeys}
         >
             <TableHeader columns={columns}>
-                {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+                {(column) => <TableColumn key={column.key} className="text-center">{column.label}</TableColumn>}
             </TableHeader>
             <TableBody items={items}>
                 {(item) => (
                 <TableRow key={item.id}>
-                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                    {(columnKey) => <TableCell className="text-center">{renderCell(item, columnKey)}</TableCell>}
                 </TableRow>
                 )}
             </TableBody>
         </Table>
-        // <div>
-        //     <div>
-        //         <div className="flex flex-row justify-evenly gap-3">
-        //             <h4>GAME</h4>
-        //             <h4>PLATFORM</h4>
-        //             <h4>ENTRY</h4>
-        //             <h4>TEAM SIZE</h4>
-        //             <h4>COMPEITION</h4>
-        //             <h4>SUPPORT</h4>
-        //             <h4>STARTING</h4>
-        //             <h4>INFO</h4>
-        //         </div>
-        //         {data.map(({
-        //             id, game, platform, entry, time_size, competition, 
-        //             support, starting, info
-        //         }) => (
-        //             <div key={id} className="flex flex-row justify-evenly gap-10 relative">
-        //                 <p>{game}</p>
-        //                 <p>{platform}</p>
-        //                 <p>{entry}</p>
-        //                 <p>{time_size}</p>
-        //                 <p>{competition}</p>
-        //                 <p>{support}</p>
-        //                 <p>{starting}</p>
-        //                 <p>{platform}</p>
-        //                 <div>
-        //                     <Button 
-        //                         // onMouseEnter={openInfo}
-        //                         // onMouseLeave={openInfo}
-        //                         // className="w-4 bg-green-300 text-center hover:cursor-pointer px-5 py-2 rounded-2xl"
-        //                     >
-        //                         i
-        //                     </Button>
-        //                 </div>
-                        
-        //                 {openModal && 
-        //                     // <div className="absolute z-10 bg-slate-500 border-black right-14 bottom-2">
-        //                         <p>{info[0].allowed_input}</p>
-                                
-        //                     // </div>
-        //                 }
-        //             </div>
-        //         ))}
-        //     </div>
-        // </div>
     )
 }

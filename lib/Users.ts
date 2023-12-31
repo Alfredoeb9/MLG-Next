@@ -9,11 +9,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "available now",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "9"
     },
     {
         "id": 2,
@@ -25,11 +26,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "available now",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller"
+        }],
+        "link": "8"
     },
     {
         "id": 3,
@@ -41,11 +43,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "not available",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "4"
     },
     {
         "id": 4,
@@ -57,11 +60,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "not available",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "16"
     },
     {
         "id": 5,
@@ -73,11 +77,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "not available",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "10"
     },
     {
         "id": 6,
@@ -89,11 +94,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "not available",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "46"
     },
     {
         "id": 7,
@@ -105,11 +111,12 @@ export const Users = [
         "support": "Live Support",
         "starting": "not available",
         "rules": [{
-            "pc_players": "true",
-            "snipers": "false",
-            "snaking": "false",
-            "allowed_input": "controller + MnK"
-        }]
+          "pc_players": "true",
+          "snipers": "false",
+          "snaking": "false",
+          "allowed_input": "controller + MnK"
+        }],
+        "link": "45"
     }
 ]
 
@@ -145,6 +152,10 @@ export const columns = [
     {
       key: "rules",
       label: "RULES",
+    },
+    {
+      key: "link",
+      label: "Run It",
     },
 ];
   
