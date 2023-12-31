@@ -8,7 +8,7 @@ export const Users = [
         "competition": "WORLDWIDE",
         "support": "Live Support",
         "starting": "available now",
-        "info": [{
+        "rules": [{
             "pc_players": "true",
             "snipers": "false",
             "snaking": "false",
@@ -24,11 +24,11 @@ export const Users = [
         "competition": "WORLDWIDE",
         "support": "Live Support",
         "starting": "available now",
-        "info": [{
+        "rules": [{
             "pc_players": "true",
             "snipers": "false",
             "snaking": "false",
-            "allowed_input": "controller + MnK"
+            "allowed_input": "controller"
         }]
     },
     {
@@ -40,7 +40,71 @@ export const Users = [
         "competition": "WORLDWIDE",
         "support": "Live Support",
         "starting": "not available",
-        "info": [{
+        "rules": [{
+            "pc_players": "true",
+            "snipers": "false",
+            "snaking": "false",
+            "allowed_input": "controller + MnK"
+        }]
+    },
+    {
+        "id": 4,
+        "game": "fornite",
+        "platform": "ps5 + ps4",
+        "entry": 150,
+        "team_size": "4v4",
+        "competition": "WORLDWIDE",
+        "support": "Live Support",
+        "starting": "not available",
+        "rules": [{
+            "pc_players": "true",
+            "snipers": "false",
+            "snaking": "false",
+            "allowed_input": "controller + MnK"
+        }]
+    },
+    {
+        "id": 5,
+        "game": "fornite",
+        "platform": "ps5 + ps4",
+        "entry": 150,
+        "team_size": "4v4",
+        "competition": "WORLDWIDE",
+        "support": "Live Support",
+        "starting": "not available",
+        "rules": [{
+            "pc_players": "true",
+            "snipers": "false",
+            "snaking": "false",
+            "allowed_input": "controller + MnK"
+        }]
+    },
+    {
+        "id": 6,
+        "game": "fornite",
+        "platform": "ps5 + ps4",
+        "entry": 150,
+        "team_size": "4v4",
+        "competition": "WORLDWIDE",
+        "support": "Live Support",
+        "starting": "not available",
+        "rules": [{
+            "pc_players": "true",
+            "snipers": "false",
+            "snaking": "false",
+            "allowed_input": "controller + MnK"
+        }]
+    },
+    {
+        "id": 7,
+        "game": "fornite",
+        "platform": "ps5 + ps4",
+        "entry": 150,
+        "team_size": "4v4",
+        "competition": "WORLDWIDE",
+        "support": "Live Support",
+        "starting": "not available",
+        "rules": [{
             "pc_players": "true",
             "snipers": "false",
             "snaking": "false",
@@ -79,8 +143,8 @@ export const columns = [
       label: "STARTING"
     },
     {
-      key: "info",
-      label: "INFO",
+      key: "rules",
+      label: "RULES",
     },
 ];
   

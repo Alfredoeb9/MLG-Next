@@ -11,7 +11,7 @@ export default function HomeFeaturedGames({ data }: HomeDataProps) {
     )
 
     return (
-        <section className='flex flex-col items-center justify-center m-auto bg-black'>
+        <section className='flex flex-col items-center justify-center m-auto bg-black py-8'>
             <div className='flex flex-row justify-center m-auto'>
                 
                 <div className="bg-red-400 h-10 w-2 mr-4" />

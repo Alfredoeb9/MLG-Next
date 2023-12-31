@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
     Table,
     TableHeader,
@@ -14,11 +14,12 @@ import {
     DropdownMenu,
     DropdownItem,
     Chip,
-    User,
+    Avatar,
     Pagination,
     Selection,
     ChipProps,
-    SortDescriptor
+    SortDescriptor,
+    Tooltip, 
   } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
 import { columns } from "@/lib/Users";
@@ -61,27 +62,84 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
     type User = typeof data[0];
     
     const [openModal, setOpenModal] = useState<boolean>(false);
-    function openInfo() {
-        setOpenModal(!openModal);
-        
+    const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [page, setPage] = useState(1);
+
+    // const filteredItems = useMemo(() => {
+    //     let filteredUsers = [...data];
+    
+    //     if (hasSearchFilter) {
+    //       filteredUsers = filteredUsers.filter((user) =>
+    //         user.name.toLowerCase().includes(filterValue.toLowerCase()),
+    //       );
+    //     }
+    //     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+    //       filteredUsers = filteredUsers.filter((user) =>
+    //         Array.from(statusFilter).includes(user.status),
+    //       );
+    //     }
+    
+    //     return filteredUsers;
+    // }, [users, filterValue, statusFilter]);
+
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+    
+        return data.slice(start, end);
+      }, [page, data, rowsPerPage]);
+
+
+    const pages = Math.ceil(data.length / rowsPerPage);
+
+    const onNextPage = useCallback(() => {
+        if (page < pages) {
+          setPage(page + 1);
+        }
+    }, [page, pages]);
+
+    const onPreviousPage = useCallback(() => {
+    if (page > 1) {
+        setPage(page - 1);
     }
+    }, [page]);
+
+    const renderToolTip = ((data: any) => {
+        
+        if (!data) return null;
+
+        let key = Object.keys(data)
+        let value = Object.values(data)
+
+        return (
+            <div>
+                <ul>
+                    <li><span className="font-bold">{key[0]}:</span> {value[0] as string}</li>
+                    <li><span className="font-bold">{key[1]}:</span> {value[1] as string}</li>
+                    <li><span className="font-bold">{key[2]}:</span> {value[2] as string}</li>
+                    <li><span className="font-bold">{key[3]}:</span> {value[3] as string}</li>
+                </ul>
+            </div>
+        )
+    })
     
     const renderCell = useCallback((user: any, columnKey: React.Key) => {
         const cellValue = user[columnKey as keyof User];
-
-        console.log("cellvalue", cellValue)
     
         switch (columnKey) {
           case "game":
             return (
-              <User
-                avatarProps={{radius: "full", size: "sm", src: ""}}
-                classNames={{
-                  description: "text-default-500",
-                }}
-                description={user.game}
-                name={user.game}
-              />
+                <div>
+                    <Avatar
+                        // size="lg"
+                        // avatarProps={{radius: "full", size: "sm", src: ""}}
+                        // classNames={"text-default-500"}
+                        // description={user.game}
+                        name={user.game}
+                    />
+                </div>
+              
             );
           case "platform":
             return (
@@ -101,24 +159,12 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                 {user.starting}
               </Chip>
             );
-          case "info":
+          case "rules":
             return (
               <div className="relative flex justify-end items-center gap-2">
-                <Dropdown className="bg-background border-1 border-default-200">
-                  <DropdownTrigger>
-                    <Button isIconOnly radius="full" size="sm" variant="light">
-                        press
-                      {/* <VerticalDotsIcon className="text-default-400" /> */}
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu>
-                    
-                    <DropdownItem>Allowed Input: {user.info[0].allowed_input}</DropdownItem>
-                    <DropdownItem>PC Players: {user.info[0].pc_players}</DropdownItem>
-                    <DropdownItem>Snaking: {user.info[0].snaking}</DropdownItem>
-                    <DropdownItem>Snipers: {user.info[0].snipers}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <Tooltip content={renderToolTip(user.rules[0])}>
+                    <Button>i</Button>
+                </Tooltip>
               </div>
             );
           default:
@@ -126,13 +172,49 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         }
       }, []);
 
+      const bottomContent = useMemo(() => {
+        return (
+          <div className="py-2 px-2 flex justify-between items-center">
+            {/* <span className="w-[30%] text-small text-default-400">
+              {selectedKeys === "all"
+                ? "All items selected"
+                : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            </span>
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={setPage}
+            /> */}
+            <div className="hidden sm:flex w-[30%] justify-end gap-2">
+              <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+                Previous
+              </Button>
+              <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+                Next
+              </Button>
+            </div>
+          </div>
+        );
+      }, [selectedKeys, data.length, page, pages]);
+
+      console.log("data", data.length)
+
     return (
 
-        <Table className="text-black" aria-label="Example table with dynamic content">
+        <Table 
+            className="text-black " 
+            aria-label="Example table with dynamic content" 
+            bottomContent={bottomContent}
+            onSelectionChange={setSelectedKeys}
+        >
             <TableHeader columns={columns}>
                 {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
             </TableHeader>
-            <TableBody items={data}>
+            <TableBody items={items}>
                 {(item) => (
                 <TableRow key={item.id}>
                     {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
