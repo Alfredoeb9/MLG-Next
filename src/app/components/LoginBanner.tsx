@@ -11,7 +11,9 @@ export default function LoginBanner() {
                 onClick={() => {
                     router.push("/auth/sign-up")
                 }}
-            >Join Now</button>
+            >
+                Join Now
+            </button>
         </section>
     )
 }
