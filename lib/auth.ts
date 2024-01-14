@@ -56,13 +56,12 @@ export const options: NextAuthOptions = {
                     // return NextResponse.json({ user: null, message: "Email is not verified, Please verify email!"}, { status: 500 })
                 };
 
-                // localStorage.setItem("user", JSON.stringify(existingUserByEmail));
-                // dispatch(login(existingUserByEmail));
-                console.log("passing")
                 return {
                     id: `${existingUserByEmail.id}`,
                     username: existingUserByEmail.username,
-                    email: existingUserByEmail.email
+                    email: existingUserByEmail.email,
+                    firstName: existingUserByEmail.firstName,
+                    lastName: existingUserByEmail.lastName
                 }
             }
         })
@@ -84,13 +83,17 @@ export const options: NextAuthOptions = {
             if (user){
                 return {
                     ...token,
-                    username: (user as User).username
+                    username: (user as unknown as User).username,
+                    firstName: user.firstName,
+                    lastName: user.lastName
                 }
             }  
             if (account) {
                 token.accessToken = account.access_token;
                 token.id = token.id;
-                token.username = (user as User).username
+                token.username = (user as unknown as User).username;
+                token.firstName = user.firstName,
+                token.lastName = user.lastName
 
             }
 
@@ -103,6 +106,8 @@ export const options: NextAuthOptions = {
                 user: {
                     ...session.user,
                     username: token.username,
+                    firstName: token.firstName,
+                    lastName: token.lastName
                     
                 }
             }
