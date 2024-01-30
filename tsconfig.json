@@ -29,8 +29,8 @@
       "DOM.Iterable",
       "ES2020"
     ],
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
