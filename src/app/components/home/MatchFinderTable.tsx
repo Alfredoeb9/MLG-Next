@@ -162,23 +162,13 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 );
             case "start_time":
-                var d1 = new Date(user.start_time), // 10:09 to
-                    d2 = new Date(); // 10:20 is 11 mins
+                let d1 = new Date(user.start_time), 
+                    d2 = new Date(); 
 
-                // var firstDate = new Date(user.start_time),
-                //     secondDate = new Date(),
-                //     firstDateInSeconds = firstDate.getTime() / 1000,
-                //     secondDateInSeconds = secondDate.getTime() / 1000,
-                //     difference = Math.abs(firstDateInSeconds - secondDateInSeconds);
-
-                    console.log("firstDateInSeconds", d1.valueOf())
-                    console.log("secondDateInSeconds", d2.valueOf())
-
-                    console.log(d2.valueOf() - d1.valueOf())
                 return (
                     <Chip
                         className="capitalize border-none gap-1 text-default-600"
-                        color={user.start_time === new Date() ? statusColorMap["available now"] : statusColorMap["not available"]}
+                        color={d1.valueOf() <= d2.valueOf() ? statusColorMap["available now"] : statusColorMap["not available"]}
                         size="sm"
                         variant="dot"
                     >
@@ -196,7 +186,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "link":
                 return (
                     <div className="flex">
-                        <Button className="bg-green-600"><Link href={`/tournaments/${user.link}`}>Accept</Link></Button>
+                        <Button className="bg-green-600"><Link href={`/tournaments/${user.id}`}>Accept</Link></Button>
                     </div>
                 );
             default:
