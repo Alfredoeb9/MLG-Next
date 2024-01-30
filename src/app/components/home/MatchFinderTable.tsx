@@ -31,7 +31,7 @@ interface MatchListProps {
 }
 
 interface MatchFinderTableProps {
-    id: number
+    id: number | string | any
     game: string,
     platform: string,
     entry: number,
@@ -59,6 +59,7 @@ const statusColorMap: Record<string, ChipProps["color"]>  = {
 };
 
 export const MatchFinderTable = ({data}: MatchListProps) => {
+    console.log("data", data)
     type User = typeof data[0];
     
     // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -90,9 +91,12 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         const end = start + rowsPerPage;
 
         setCurrentSet([start, end])
-    
-        return data.slice(start, end);
+        
+        console.log(data.matches)
+        return data?.matches.slice(start, end);
       }, [page, data, rowsPerPage]);
+
+      console.log("items", items)
 
 
     const pages = Math.ceil(data.length / rowsPerPage);
@@ -115,7 +119,9 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
 
         let key = Object.keys(data)
         let value = Object.values(data)
-
+        
+        console.log("key", key)
+        console.log("value", value)
         return (
             <div>
                 <ul>
@@ -129,8 +135,9 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
     })
     
     const renderCell = useCallback((user: any, columnKey: React.Key) => {
+        console.log("users", user)
         const cellValue = user[columnKey as keyof User];
-    
+        
         switch (columnKey) {
             case "game":
                 return (
@@ -145,31 +152,47 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 
                 );
-            case "platform":
+            case "platforms":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-small capitalize">{user.platform}</p>
+                        {user?.platforms.length > 1 ? "Cross Platform" : user.platforms}
+
+{/* <p className="text-bold text-small capitalize">{platform}</p> */}
+                        
                     </div>
                 );
-            case "starting":
+            case "start_time":
+                var d1 = new Date(user.start_time), // 10:09 to
+                    d2 = new Date(); // 10:20 is 11 mins
+
+                // var firstDate = new Date(user.start_time),
+                //     secondDate = new Date(),
+                //     firstDateInSeconds = firstDate.getTime() / 1000,
+                //     secondDateInSeconds = secondDate.getTime() / 1000,
+                //     difference = Math.abs(firstDateInSeconds - secondDateInSeconds);
+
+                    console.log("firstDateInSeconds", d1.valueOf())
+                    console.log("secondDateInSeconds", d2.valueOf())
+
+                    console.log(d2.valueOf() - d1.valueOf())
                 return (
                     <Chip
                         className="capitalize border-none gap-1 text-default-600"
-                        color={statusColorMap[user.starting]}
+                        color={user.start_time === new Date() ? statusColorMap["available now"] : statusColorMap["not available"]}
                         size="sm"
                         variant="dot"
                     >
-                        {user.starting}
+                        { d1.valueOf() <= d2.valueOf() ? "Available Now" : "Not Available"}
                     </Chip>
                 );
-            case "rules":
-                return (
-                    <div className="relative flex justify-center items-center gap-2">
-                        <Tooltip content={renderToolTip(user.rules[0])}>
-                            <button className="text-center bg-gray-400 px-2 py-1 rounded-full">i</button>
-                        </Tooltip>
-                    </div>
-                );
+            // case "rules":
+            //     return (
+            //         <div className="relative flex justify-center items-center gap-2">
+            //             <Tooltip content={renderToolTip(user?.rules[0])}>
+            //                 <button className="text-center bg-gray-400 px-2 py-1 rounded-full">i</button>
+            //             </Tooltip>
+            //         </div>
+            //     );
             case "link":
                 return (
                     <div className="flex">
@@ -212,7 +235,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             </TableHeader>
             <TableBody items={items}>
                 {(item) => (
-                <TableRow key={item.id}>
+                <TableRow key={item?.id}>
                     {(columnKey) => <TableCell className="text-center">{renderCell(item, columnKey)}</TableCell>}
                 </TableRow>
                 )}

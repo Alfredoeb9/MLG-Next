@@ -126,8 +126,8 @@ export const columns = [
       label: "GAME",
     },
     {
-      key: "platform",
-      label: "PLATFORM",
+      key: "platforms",
+      label: "PLATFORMS",
     },
     {
       key: "entry",
@@ -138,7 +138,7 @@ export const columns = [
       label: "TEAM SIZE",
     },
     {
-      key: "competition",
+      key: "tournament_type",
       label: "COMPETITION",
     },
     {
@@ -146,7 +146,7 @@ export const columns = [
       label: "SUPPORT",
     },
     {
-      key: "starting",
+      key: "start_time",
       label: "STARTING"
     },
     {
