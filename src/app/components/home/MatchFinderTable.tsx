@@ -27,7 +27,7 @@ import Link from "next/link";
 
 
 interface MatchListProps {
-    data: MatchFinderTableProps[],
+    data: MatchFinderTableProps[] | any,
 }
 
 interface MatchFinderTableProps {
@@ -92,11 +92,8 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
 
         setCurrentSet([start, end])
         
-        console.log(data.matches)
-        return data?.matches.slice(start, end);
+        return data.matches.slice(start, end);
       }, [page, data, rowsPerPage]);
-
-      console.log("items", items)
 
 
     const pages = Math.ceil(data.length / rowsPerPage);
@@ -224,7 +221,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                 {(column) => <TableColumn key={column.key} className="text-center">{column.label}</TableColumn>}
             </TableHeader>
             <TableBody items={items}>
-                {(item) => (
+                {(item: any) => (
                 <TableRow key={item?.id}>
                     {(columnKey) => <TableCell className="text-center">{renderCell(item, columnKey)}</TableCell>}
                 </TableRow>
