@@ -21,7 +21,6 @@ import {
     SortDescriptor,
     Tooltip, 
   } from "@nextui-org/react";
-import { Key } from "@react-types/shared";
 import { columns } from "@/lib/Users";
 import Link from "next/link";
 
@@ -49,9 +48,6 @@ interface MatchFinderInfoProps {
     allowed_input: string
 }
 
-// interface MatchFinderTableProps extends Array<MatchFinderTableProps>{}
-
-
 
 const statusColorMap: Record<string, ChipProps["color"]>  = {
     "available now": "success",
@@ -59,7 +55,7 @@ const statusColorMap: Record<string, ChipProps["color"]>  = {
 };
 
 export const MatchFinderTable = ({data}: MatchListProps) => {
-    console.log("data", data)
+    if (!data) return null;
     type User = typeof data[0];
     
     // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -96,7 +92,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
       }, [page, data, rowsPerPage]);
 
 
-    const pages = Math.ceil(data.length / rowsPerPage);
+    const pages = Math.ceil(data.matches.length / rowsPerPage);
 
     const onNextPage = useCallback(() => {
         if (page < pages) {
@@ -152,9 +148,9 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "platforms":
                 return (
                     <div className="flex flex-col">
-                        {user?.platforms.length > 1 ? "Cross Platform" : user.platforms}
+                        {user?.platforms.length > 1 ? "Cross Platform" : <p className="text-bold text-small capitalize">{user?.platforms}</p>}
 
-{/* <p className="text-bold text-small capitalize">{platform}</p> */}
+
                         
                     </div>
                 );
@@ -165,11 +161,11 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                 return (
                     <Chip
                         className="capitalize border-none gap-1 text-default-600"
-                        color={d1.valueOf() <= d2.valueOf() ? statusColorMap["available now"] : statusColorMap["not available"]}
+                        color={d2.valueOf() <= d1.valueOf() ? statusColorMap["available now"] : statusColorMap["not available"]}
                         size="sm"
                         variant="dot"
                     >
-                        { d1.valueOf() <= d2.valueOf() ? "Available Now" : "Not Available"}
+                        { d2.valueOf() <= d1.valueOf() ? "Available Now" : "Not Available"}
                     </Chip>
                 );
             // case "rules":
@@ -195,7 +191,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         return (
             <div className="py-2 px-2 block items-center">
                 <div className="flex justify-between">
-                    <p>{currentSet[0]} out of {data.length} cash matches</p>
+                    <p>{currentSet[0]} out of {data.matches.length} cash matches</p>
                     <div className="flex gap-2">
                         <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
                             Previous
