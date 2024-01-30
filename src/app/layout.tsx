@@ -9,6 +9,7 @@ import { options } from '@/lib/auth'
 import ReduxProvider from "@/src/app/components/providers/ReduxProvider"
 import AppLogoutProvider from "@/src/app/components/providers/AppLogoutProvider"
 import { NextUIProviders } from '@/src/app/components/providers/NextUIProvider'
+import QueryProvider from './components/providers/QueryProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,11 +31,17 @@ export default async function RootLayout({
         <NextUIProviders>
           <AppLogoutProvider>
             <Provider>
-                <Header />
+              <QueryProvider>
                 <ReduxProvider user={session?.user}>
-                  {children}
+                  <Header />
+                  <div>
+                    {children}
+                  </div>
+                  
                 </ReduxProvider>
-              </Provider>
+              </QueryProvider>
+              
+            </Provider>
           </AppLogoutProvider>
         </NextUIProviders>
       </body>
