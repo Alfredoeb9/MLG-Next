@@ -7,18 +7,10 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Input,
     Button,
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
     Chip,
     Avatar,
-    Pagination,
-    Selection,
     ChipProps,
-    SortDescriptor,
     Tooltip, 
   } from "@nextui-org/react";
 import { columns } from "@/lib/Users";
@@ -107,16 +99,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
     }, [page]);
 
     const renderToolTip = ((data: any) => {
-        
         if (!data || data === undefined) return null;
-
-        let key = Object.keys(data)
-        let value = Object.values(data)
-        
-        console.log('data', data[0])
-        {data.map((rule: any) => {
-            console.log("ruleee", Object.keys(rule))
-        })}
         
         return (
             <div>
@@ -124,10 +107,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     {data.map((rule: any) => (
                         <li><span className="font-bold">{Object.keys(rule)[0]}:</span> {Object.values(rule)}</li>
                     ))}
-                    
-                    {/* <li><span className="font-bold">{key[1]}:</span> {JSON.stringify(data[1])}</li> */}
-                    {/* <li><span className="font-bold">{key[2]}:</span> {value[2] as string}</li>
-                    <li><span className="font-bold">{key[3]}:</span> {value[3] as string}</li> */}
                 </ul>
             </div>
         )
@@ -179,7 +158,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     <div>Live Support</div>
                 );
             case "rules":
-                console.log("rules", user)
                 return (
                     <div className="relative flex justify-center items-center gap-2">
                         <Tooltip content={renderToolTip(user?.rules)}>
