@@ -25,6 +25,8 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(options)
   console.log('ses', session)
+  // eliteleagueesports.com
+
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -108,27 +108,35 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
 
     const renderToolTip = ((data: any) => {
         
-        if (!data) return null;
+        if (!data || data === undefined) return null;
 
         let key = Object.keys(data)
         let value = Object.values(data)
         
-        console.log("key", key)
-        console.log("value", value)
+        console.log('data', data[0])
+        {data.map((rule: any) => {
+            console.log("ruleee", Object.keys(rule))
+        })}
+        
         return (
             <div>
                 <ul>
-                    <li><span className="font-bold">{key[0]}:</span> {value[0] as string}</li>
-                    <li><span className="font-bold">{key[1]}:</span> {value[1] as string}</li>
-                    <li><span className="font-bold">{key[2]}:</span> {value[2] as string}</li>
-                    <li><span className="font-bold">{key[3]}:</span> {value[3] as string}</li>
+                    {data.map((rule: any) => (
+                        <li><span className="font-bold">{Object.keys(rule)[0]}:</span> {Object.values(rule)}</li>
+                    ))}
+                    
+                    {/* <li><span className="font-bold">{key[1]}:</span> {JSON.stringify(data[1])}</li> */}
+                    {/* <li><span className="font-bold">{key[2]}:</span> {value[2] as string}</li>
+                    <li><span className="font-bold">{key[3]}:</span> {value[3] as string}</li> */}
                 </ul>
             </div>
         )
     })
+
+    
     
     const renderCell = useCallback((user: any, columnKey: React.Key) => {
-        console.log("users", user)
+        
         const cellValue = user[columnKey as keyof User];
         
         switch (columnKey) {
@@ -149,9 +157,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                 return (
                     <div className="flex flex-col">
                         {user?.platforms.length > 1 ? "Cross Platform" : <p className="text-bold text-small capitalize">{user?.platforms}</p>}
-
-
-                        
                     </div>
                 );
             case "start_time":
@@ -168,14 +173,20 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                         { d2.valueOf() <= d1.valueOf() ? "Available Now" : "Not Available"}
                     </Chip>
                 );
-            // case "rules":
-            //     return (
-            //         <div className="relative flex justify-center items-center gap-2">
-            //             <Tooltip content={renderToolTip(user?.rules[0])}>
-            //                 <button className="text-center bg-gray-400 px-2 py-1 rounded-full">i</button>
-            //             </Tooltip>
-            //         </div>
-            //     );
+            case "support":
+
+                return (
+                    <div>Live Support</div>
+                );
+            case "rules":
+                console.log("rules", user)
+                return (
+                    <div className="relative flex justify-center items-center gap-2">
+                        <Tooltip content={renderToolTip(user?.rules)}>
+                            <button className="text-center bg-gray-400 px-2 py-1 rounded-full">i</button>
+                        </Tooltip>
+                    </div>
+                );
             case "link":
                 return (
                     <div className="flex">
