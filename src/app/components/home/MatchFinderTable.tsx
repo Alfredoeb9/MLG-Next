@@ -104,8 +104,8 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         return (
             <div>
                 <ul>
-                    {data.map((rule: any) => (
-                        <li><span className="font-bold">{Object.keys(rule)[0]}:</span> {Object.values(rule)}</li>
+                    {data.map((rule: any, i: number) => (
+                        <li key={i}><span className="font-bold">{Object.keys(rule)[0]}:</span> {Object.values(rule)}</li>
                     ))}
                 </ul>
             </div>
