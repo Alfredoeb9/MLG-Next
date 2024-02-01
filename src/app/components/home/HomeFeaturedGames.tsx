@@ -22,7 +22,7 @@ export default function HomeFeaturedGames({ data }: HomeDataProps) {
                     <p className='text-white mb-2'>Select a game and then choose how you want to play.</p>
                     <div className='flex flex-row  gap-3'>
                         {data.games.slice(0,4).map((set: any, i: number) => (
-                            <Link href={"/cross-platform/tournaments"} key={i} className="flex items-center border-2 border-slate-500 h-20 text-white">
+                            <Link href={"/cross-platform/tournaments"} key={set.id} className="flex items-center border-2 border-slate-500 h-20 text-white">
                                 {set.game}
                             </Link>
                         ))}
