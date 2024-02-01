@@ -2,6 +2,7 @@
 import { Users } from "@/lib/Users"
 import {MatchFinderTable} from "./MatchFinderTable"
 import { useQuery } from "@tanstack/react-query"
+import {Spinner} from "@nextui-org/react";
 
 export default function HomeMatchFinder() {
     const { data: matches, isLoading, isError, isSuccess} = useQuery<any>({
@@ -12,6 +13,8 @@ export default function HomeMatchFinder() {
             ),
         retry: 3
     })
+
+    if (isLoading) return <Spinner label="Loading..." color="warning" />
 
     return (
         <section className="flex flex-col items-center justify-center m-auto py-8">

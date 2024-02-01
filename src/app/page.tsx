@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 // import { getServerSession } from 'next-auth';
 // import { options } from '@/lib/auth';
 import { useSession } from 'next-auth/react';
+import {Spinner} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import LoginBanner from '@/components/LoginBanner';
@@ -28,7 +29,7 @@ import Footer from '@/components/Footer';
 // ]
 
 export default function Home() {
-  const data = useQuery<any>({
+  const { data: data, isLoading, isError, isSuccess} = useQuery<any>({
     queryKey: ["game-finder"],
     queryFn: () => 
         fetch('/api/games').then((res) =>
@@ -37,7 +38,6 @@ export default function Home() {
     retry: 3
   })
 
-  console.log("data>>", data)
   const router = useRouter()
   // const user = useAppSelector(state => state.authXReducer.user);
   // const session = useSession();
@@ -46,6 +46,8 @@ export default function Home() {
   // const session = await getServerSession(options)
   // console.log("session====", formattedSession?.user?.username)
   // console.log("user====", user)
+
+  if (isLoading) return <Spinner label="Loading..." color="warning" />
   
   return (
     <main className=" bg-slate-950">
@@ -68,7 +70,7 @@ export default function Home() {
       </section>
       
       
-      <HomeFeaturedGames data={data.data} />
+      <HomeFeaturedGames data={isSuccess && data} />
 
       <LoginBanner />
 
