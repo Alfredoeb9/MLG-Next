@@ -1,6 +1,7 @@
 "use client";
 import React from 'react'
 import { useAppSelector } from '@/redux/hooks';
+import { useQuery } from "@tanstack/react-query"
 // import { selectUserAuth } from '@/redux/features/AuthContext';
 // import { getServerSession } from 'next-auth';
 // import { options } from '@/lib/auth';
@@ -12,21 +13,31 @@ import HomeFeaturedGames from '@/src/app/components/home/HomeFeaturedGames';
 import HomeMatchFinder from '@/components/home/HomeMatchFinder';
 import Footer from '@/components/Footer';
 
-const data: string[] = [
-  'entry 1',
-  'entry 2',
-  'entry 3',
-  'entry 4',
-  'entry 5',
-  'entry 6',
-  'entry 7',
-  'entry 8',
-  'entry 9',
-  'entry 10',
-  'entry 11',
-]
+// const data: string[] = [
+//   'entry 1',
+//   'entry 2',
+//   'entry 3',
+//   'entry 4',
+//   'entry 5',
+//   'entry 6',
+//   'entry 7',
+//   'entry 8',
+//   'entry 9',
+//   'entry 10',
+//   'entry 11',
+// ]
 
 export default function Home() {
+  const data = useQuery<any>({
+    queryKey: ["game-finder"],
+    queryFn: () => 
+        fetch('/api/games').then((res) =>
+            res.json()
+        ),
+    retry: 3
+  })
+
+  console.log("data>>", data)
   const router = useRouter()
   // const user = useAppSelector(state => state.authXReducer.user);
   // const session = useSession();
@@ -57,7 +68,7 @@ export default function Home() {
       </section>
       
       
-      <HomeFeaturedGames data={data} />
+      <HomeFeaturedGames data={data.data} />
 
       <LoginBanner />
 

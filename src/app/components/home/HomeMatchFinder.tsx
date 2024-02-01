@@ -13,9 +13,6 @@ export default function HomeMatchFinder() {
         retry: 3
     })
 
-    console.log("query", matches)
-    console.log("isSuccess", isSuccess)
-    console.log("query", matches)
     return (
         <section className="flex flex-col items-center justify-center m-auto py-8">
             <div className="flex flex-row justify-center m-auto">
