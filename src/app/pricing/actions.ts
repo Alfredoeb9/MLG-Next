@@ -6,19 +6,16 @@ import { getServerSession } from "next-auth";
 
 export async function checkoutAction(credits: number) {
     const session = await getServerSession();
-    console.log('pricing', session)
     if (!session.user.email) {
         throw new Error("You must be logged in to checkout!")
     }
 
     const priceIds: Record<number, string> = {
-        10: process.env.PRICE_ID_50!,
+        25: process.env.PRICE_ID_25!,
         50: process.env.PRICE_ID_50!,
-        // 100: process.env.PRICE_ID_100!,
-        // 250: process.env.PRICE_ID_250!,
+        100: process.env.PRICE_ID_100!,
+        250: process.env.PRICE_ID_250!,
     }
-
-    console.log("priceing", priceIds)
 
     const priceId = priceIds[credits];
 
