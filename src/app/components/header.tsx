@@ -3,17 +3,20 @@ import React from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 
 export default function Header() {
-    const { data: session, status } = useSession();
+    const { data: user, status } = useSession();
 
     const router = useRouter();
 
-    console.log("status", status)
+    // console.log("session", session)
 
     // status could === 
     // unauthenticated || authenticated
+
+    if (!user) throw new Error('No user is signed in')
 
     return (
         <header className="nav">
@@ -41,17 +44,39 @@ export default function Header() {
                             </Link>
                         </div>
                     ) : (
-                        <Link
-                            href={`/api/auth/signout`}
-                            className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-8 text-sm font-medium text-zinc-50 shadow transition-colors hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                signOut();
-                                router.push("/");
-                            }}
-                        >
-                            Sign out
-                        </Link>
+                        <div>
+                            <Dropdown placement="bottom-end">
+                                <DropdownTrigger>
+                                    <Avatar
+                                    isBordered
+                                    as="button"
+                                    className="transition-transform"
+                                    color="secondary"
+                                    name={user.user.firstName + ' ' + user?.user.lastName}
+                                    size="sm"
+                                    src={`${user?.user.email?.charAt(1)}`}
+                                    />
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label="Profile Actions" variant="flat" disabledKeys={["profile"]}>
+                                    <DropdownItem key="profile" className="h-14 gap-2">
+                                    <p className="font-semibold">Signed in as</p>
+                                    <p className="font-semibold">{user?.user.email}</p>
+                                    </DropdownItem>
+                                    <DropdownItem key="settings">My Settings</DropdownItem>
+                                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                                    <DropdownItem key="analytics">Stats</DropdownItem>
+                                    <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+                                    <DropdownItem key="logout" color="danger" onClick={(e) => {
+                                                e.preventDefault();
+                                                signOut();
+                                                router.push("/");
+                                            }}>
+                                    Log Out
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                                
+                        </div>
                     )}
                 </div>
 			</div>
