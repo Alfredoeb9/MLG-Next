@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function Footer(){
     return (
-        <footer className="pb-4">
-            <div className="flex flex-row justify-evenly m-auto text-white">
+        <footer className="p-8 max-w-7xl w-full">
+            <div className="flex flex-row justify-evenly m-auto text-white ">
                 <div className="footer-left flex flex-row gap-4 justify-center align-top">
                     <div>
                         <h4>COMPETITIONS</h4>

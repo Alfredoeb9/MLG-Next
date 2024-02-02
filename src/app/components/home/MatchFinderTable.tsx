@@ -15,7 +15,7 @@ import {
   } from "@nextui-org/react";
 import { columns } from "@/lib/Users";
 import Link from "next/link";
-
+import Image from 'next/image';
 
 interface MatchListProps {
     data: MatchFinderTableProps[] | any,
@@ -122,12 +122,11 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "game":
                 return (
                     <div>
-                        <Avatar
-                            // size="lg"
-                            // avatarProps={{radius: "full", size: "sm", src: ""}}
-                            // classNames={"text-default-500"}
-                            // description={user.game}
-                            name={user.game}
+                         <Image
+                            src={`/images/${user.name}.png`} // Route of the image file
+                            height={40} // Desired size with correct aspect ratio
+                            width={40} // Desired size with correct aspect ratio
+                            alt={`${user.name} placeholder image`}
                         />
                     </div>
                 
@@ -168,7 +167,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "link":
                 return (
                     <div className="flex">
-                        <Button className="bg-green-600"><Link href={`/tournaments/${user.id}`}>Accept</Link></Button>
+                        <Button className="bg-green-600"><Link href={{ pathname: `/tournaments/${user.id}`, query: { id: user.id }}}>Accept</Link></Button>
                     </div>
                 );
             default:

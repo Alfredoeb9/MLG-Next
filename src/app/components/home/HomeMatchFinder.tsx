@@ -17,15 +17,16 @@ export default function HomeMatchFinder() {
     if (isLoading) return <Spinner label="Loading..." color="warning" />
 
     return (
-        <section className="flex flex-col items-center justify-center m-auto py-8">
-            <div className="flex flex-row justify-center m-auto">
+        <section className="flex flex-col items-center justify-center m-auto p-8 max-w-7xl w-full">
+            <div className="flex flex-row justify-center m-auto max-w-7xl w-full">
                 <div className="bg-red-400 h-10 w-2 mr-4" />
 
-                <div className="text-white">
+                <div className="text-white w-full">
                     <h2 className="text-4xl">MatchFinder</h2>
                     <p className="text-xl mb-2">Head to head matches where you pick the game, rules and prize.</p>
 
                     { isSuccess && <MatchFinderTable data={matches} />}
+                    { isError && <p>Please refresh again!</p>}
                     
                 </div>
                 
