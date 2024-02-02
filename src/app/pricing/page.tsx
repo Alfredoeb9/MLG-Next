@@ -3,19 +3,16 @@ import Link from "next/link";
 import React from "react";
 import PricingCards from "./PricingCards";
 import { useSession } from "next-auth/react";
-import AccessDenied from "../components/access-denied";
 import { useRouter } from "next/navigation";
 
 export default function Pricing() {
     const { data: user, status } = useSession();
     const router = useRouter()
 
-    // console.log("session", session)
-
     // status could === 
     // unauthenticated || authenticated
 
-    if (!user || status === 'unauthenticated') return router.push('/auth/sign-in')
+    if (status === "unauthenticated") return router.push('/auth/sign-in')
 
     return (
         <section className="flex justify-center items-center flex-col max-w-7xl w-full p-8">

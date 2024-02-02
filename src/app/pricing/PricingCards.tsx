@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
 import React from "react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import { checkoutAction } from "./actions";
@@ -35,20 +34,17 @@ export default function PricingCards() {
                             
                             
                         </CardBody>
-                        
 
                         <CardFooter className="flex justify-center items-center">
                                 <p className="mr-2">{card.credits} Credits</p>
 
-                                <span className="bg-slate-400 px-3 py-4 rounded-md text-white hover:scale-105 shadow-xl">
+                                <span className="bg-blue-400 px-3 py-4 rounded-md text-white hover:scale-105 shadow-xl">
                                     Buy for ${card.cost}
                                 </span>
                         </CardFooter>
                     </Card>
                 ))}
             </div>
-
-            
         </div>
     )
 }

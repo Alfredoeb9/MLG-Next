@@ -1,6 +1,5 @@
 "use server";
 
-import { getSession } from "next-auth/react";
 import { stripe } from "@/lib/stripe";
 import { getServerSession } from "next-auth";
 
