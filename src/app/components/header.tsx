@@ -55,7 +55,7 @@ export default function Header() {
                                     src={`${user?.user.email?.charAt(1)}`}
                                     />
                                 </DropdownTrigger>
-                                <DropdownMenu aria-label="Profile Actions" variant="flat" disabledKeys={["profile"]}>
+                                <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile"]}>
                                     <DropdownItem key="profile" className="h-14 gap-2">
                                     <p className="font-semibold">Signed in as</p>
                                     <p className="font-semibold">{user?.user.email}</p>
@@ -63,6 +63,7 @@ export default function Header() {
                                     <DropdownItem key="settings">My Settings</DropdownItem>
                                     <DropdownItem key="team_settings">Team Settings</DropdownItem>
                                     <DropdownItem key="analytics">Stats</DropdownItem>
+                                    <DropdownItem key="buy_credits"><Link href={"/pricing"}>Buy Credits</Link></DropdownItem>
                                     <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
                                     <DropdownItem key="logout" color="danger" onClick={(e) => {
                                                 e.preventDefault();

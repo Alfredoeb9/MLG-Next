@@ -117,6 +117,9 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
     const renderCell = useCallback((user: any, columnKey: React.Key) => {
         
         const cellValue = user[columnKey as keyof User];
+
+        let d1 = new Date(user.start_time), 
+                    d2 = new Date();
         
         switch (columnKey) {
             case "game":
@@ -138,8 +141,8 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 );
             case "start_time":
-                let d1 = new Date(user.start_time), 
-                    d2 = new Date(); 
+                // let d1 = new Date(user.start_time), 
+                //     d2 = new Date(); 
 
                 return (
                     <Chip
@@ -167,7 +170,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "link":
                 return (
                     <div className="flex">
-                        <Button className="bg-green-600"><Link href={{ pathname: `/tournaments/${user.id}`, query: { id: user.id }}}>Accept</Link></Button>
+                        <Button isDisabled={d2.valueOf() >= d1.valueOf() ? true : false} className="bg-green-600"><Link  href={{ pathname: `/tournaments/${user.id}`, query: { id: user.id }}}>Accept</Link></Button>
                     </div>
                 );
             default:

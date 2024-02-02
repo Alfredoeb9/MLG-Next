@@ -36,7 +36,7 @@ export default async function RootLayout({
               <QueryProvider>
                 <ReduxProvider user={session?.user}>
                   <Header />
-                  <div className='bg-slate-950 max-w-7xl w-full'>
+                  <div className='max-w-7xl w-full'>
                     {children}
                   </div>
                   
