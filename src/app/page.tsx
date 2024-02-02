@@ -70,7 +70,7 @@ export default function Home() {
       </section>
       
       
-      <HomeFeaturedGames data={isSuccess && data} />
+      <HomeFeaturedGames data={isSuccess && data} error={isError} />
 
       <LoginBanner />
 
