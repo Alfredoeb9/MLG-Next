@@ -16,8 +16,6 @@ export default function Header() {
     // status could === 
     // unauthenticated || authenticated
 
-    if (!user) throw new Error('No user is signed in')
-
     return (
         <header className="nav">
             <div className="w-full h-16 px-4 flex items-center justify-between bg-gray-200 dark:bg-gray-800 rounded-b-lg">
