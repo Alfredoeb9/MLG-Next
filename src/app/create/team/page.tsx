@@ -2,9 +2,11 @@
 import { CheckboxGroup, Checkbox, Select, SelectItem, Spinner } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 export default function CreateTeam() {
+    const router = useRouter();
     const { data: user, status } = useSession();
     const [selectedGames, setSelectedGames] = useState<string>("");
     const [error, setError] = useState<any>(null);
@@ -33,8 +35,6 @@ export default function CreateTeam() {
         retry: 3
     });
 
-    console.log("dat", user)
-
     async function handleCreateTeam(e: FormEvent) {
         e.preventDefault();
         // setIsLoading(true);
@@ -45,8 +45,6 @@ export default function CreateTeam() {
             teamName,
             user: user.user.email
         }
-
-        console.log("json", json)
 
         try {
             const response = await fetch("/api/create/game", {
@@ -70,10 +68,11 @@ export default function CreateTeam() {
                 setError("");
                 // setMessage(data.message)
                 
-                return response
+                return data
             }
-
-            
+            setTeamName("");
+            setSelectedGames("");
+            router.push('/')
         } catch (error) {
             return setError(error);
         }

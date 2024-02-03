@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     const successEnroll = await db.tournaments.update({
       where: {
-        id: bodier,
+        id: bodier.search,
       },
       data: {
         enrolled: {
@@ -19,6 +19,19 @@ export async function POST(req: NextRequest) {
     })
 
     if (!successEnroll) throw new Error("Error occured while enrolling, please try again")
+
+    let creditsUpdated = await db.user.update({
+      where: {
+        email: bodier.email
+      },
+      data: {
+        credits: {
+          decrement: parseInt(bodier.credits)
+        }
+      }
+    })
+
+    console.log("creditsUpdated", creditsUpdated)
 
     return NextResponse.json(
       {

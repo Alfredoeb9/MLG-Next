@@ -4,14 +4,43 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
 
 
 export default function Header() {
-    const { data: user, status } = useSession();
+    const session = useSession();
 
     const router = useRouter();
 
-    // console.log("session", session)
+    const {data: user} = useQuery<any>({
+        queryKey: ["user"],
+        queryFn: async () => 
+            fetch(`/api/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(session?.data.user.email)
+            }).then(async (res) => {
+                let data = await res.json()
+
+                if (res.status === 500) {
+                    if (data.message.includes("not enrolled in a team")) {
+                        return router.push("/create/team")
+                    }
+                }
+
+                if (res.status === 201) {
+                    return data
+                }
+            }    
+            ).catch(() => {
+                console.log("catch ran up")
+            }),
+        retry: 3
+    })
+
+    console.log("session", user)
 
     // status could === 
     // unauthenticated || authenticated
@@ -26,7 +55,7 @@ export default function Header() {
                     <Link className="text-md font-bold text-zinc-900" href="/protected">Protected</Link>
                 </nav>
                 <div>
-                    {status !== "authenticated" ? (
+                    {session.status !== "authenticated" ? (
                         <div className="flex flex-row">
                             <Link
                                 href={`/auth/sign-in`}
@@ -43,6 +72,7 @@ export default function Header() {
                         </div>
                     ) : (
                         <div>
+                            {user?.data.credits}
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar
@@ -50,15 +80,15 @@ export default function Header() {
                                     as="button"
                                     className="transition-transform"
                                     color="secondary"
-                                    name={user.user.firstName + ' ' + user?.user.lastName}
+                                    name={session.data.user.firstName + ' ' + session?.data.user.lastName}
                                     size="sm"
-                                    src={`${user?.user.email?.charAt(1)}`}
+                                    src={`${session?.data.user.email?.charAt(1)}`}
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile"]}>
                                     <DropdownItem key="profile" className="h-14 gap-2">
                                     <p className="font-semibold">Signed in as</p>
-                                    <p className="font-semibold">{user?.user.email}</p>
+                                    <p className="font-semibold">{session?.data.user.email}</p>
                                     </DropdownItem>
                                     <DropdownItem key="settings">My Settings</DropdownItem>
                                     <DropdownItem key="team_settings">Team Settings</DropdownItem>

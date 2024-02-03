@@ -10,7 +10,6 @@ type Metadata = {
 }
 
 export async function POST(req: NextRequest) {
-    console.log("running")
     const body = await req.text();
     const signature = headers().get("Stripe-Signature") ?? "";
 

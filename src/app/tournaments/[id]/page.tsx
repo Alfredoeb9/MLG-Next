@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
 import ErrorComponent from "@/components/ErrorComponent";
+import Link from "next/link";
 
 export default function Tournaments({
     params: { id },
@@ -50,7 +51,7 @@ export default function Tournaments({
                 if (res.status >= 500) return setError(data?.message)
 
                 if (res.status === 201) {
-                    router.push('/tournaments/enroll')
+                    router.push(`/tournaments/enroll?id=${tournamentId}`)
                     return data;
                 };
 
@@ -140,7 +141,7 @@ export default function Tournaments({
                         </div>
                     </div>
                     <div className="tournament_info_footer">
-                        <button onClick={() => fetchEnroll()}>Enroll Now</button>
+                        <Link href={`/tournaments/enroll?id=${tournamentId}`}>Enroll Now</Link>
                         <button>Find Teammates</button>
                     </div>
                 </div>
