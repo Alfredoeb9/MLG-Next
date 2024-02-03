@@ -38,14 +38,15 @@ model User {
   sessions      Session[]
   ActivateToken ActivateToken[]
   team          Team?              @relation(fields: [teamId], references: [id])
-  teamId        String?
+  teamId        String
 
   @@map("users")
 }
 
 model Team {
-  id            String          @id @default(uuid())
+  id            String          @id @default(cuid())
   game          String
+  teamName      String          @unique
   users         User[]
 }
 
