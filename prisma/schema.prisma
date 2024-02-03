@@ -37,8 +37,16 @@ model User {
   updatedAt     DateTime        @updatedAt @map("updated_at")
   sessions      Session[]
   ActivateToken ActivateToken[]
+  team          Team?              @relation(fields: [teamId], references: [id])
+  teamId        String?
 
   @@map("users")
+}
+
+model Team {
+  id            String          @id @default(uuid())
+  game          String
+  users         User[]
 }
 
 model ActivateToken {

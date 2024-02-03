@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { usePathname } from 'next/navigation'
-import { useQuery } from "@tanstack/react-query"
+import { usePathname, useRouter } from 'next/navigation';
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
 import ErrorComponent from "@/components/ErrorComponent";
@@ -13,7 +13,8 @@ export default function Tournaments({
         id: string;
     }
 }) {
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const router = useRouter();
     const [ tournamentId, setTournamentId ] = useState<string>(id);
     const [ error, setError ] = useState<any>(null);
 
@@ -34,14 +35,6 @@ export default function Tournaments({
         retry: 3
     })
 
-    // const { data: enroll } = useQuery<any>({
-    //     queryKey: ["enroll-tournament"],
-    //     queryFn: () => fetchEnroll(),
-    //     retry: 3
-    // });
-
-    // console.log("enroll", enroll)
-
     const fetchEnroll = async () => {
         try {
             await fetch(`/api/tournament`, {
@@ -51,12 +44,17 @@ export default function Tournaments({
                 },
                 body: JSON.stringify(tournamentId)
             }).then(async (res) => {
-                // res.json()
-                console.log("ehat", await res)
 
                 let data = await res.json()
 
-                if (res.status >= 500) setError(data?.message)
+                if (res.status >= 500) return setError(data?.message)
+
+                if (res.status === 201) {
+                    router.push('/tournaments/enroll')
+                    return data;
+                };
+
+                
             }
                 
             ).catch(() => {
@@ -64,40 +62,21 @@ export default function Tournaments({
             })
         } catch (error) {
             setError(error)
-            console.log("lets do it")
         }
         
     }
-
-    console.log("ere", error)
-
-    // function handleEnrollToTournament() {
-    //     const teamEnrolled = useQuery<any>({
-    //         queryKey: ["enroll-tournament"],
-    //         queryFn: () => 
-                
-    //         retry: 3
-    //     })
-
-    //     console.log("teamEnrolled", teamEnrolled)
-    // }
-
-    // const handleEnrollToTournament = () => {
-        
-    // }
 
     if ( isLoading ) return <Spinner label="Loading..." color="warning" />
 
     if ( isError || tournament == undefined || tournament == null || tournament.isError || tournament.message.includes("does not exist")) return <ErrorComponent />
 
     let d1 = new Date(tournament.data.start_time), 
-                    d2 = new Date();
+        d2 = new Date();
 
-    var pstDate = d1.toLocaleString("en-US", {
-        timeZone: "America/Los_Angeles"
+    let pstDate = d1.toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles"
         })
 
-        console.log("pstDate", pstDate)
     return (
         <div className="flex flex-col items-center justify-between">
             <div className="tournament_backgroundHeader">
