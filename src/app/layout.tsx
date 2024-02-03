@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import React from 'react'
-import Header from "@/components/header"
 import Provider from "@/src/app/components/providers/Provider"
 import { getServerSession } from 'next-auth'
 import { options } from '@/lib/auth'
@@ -10,6 +9,8 @@ import ReduxProvider from "@/src/app/components/providers/ReduxProvider"
 import AppLogoutProvider from "@/src/app/components/providers/AppLogoutProvider"
 import { NextUIProviders } from '@/src/app/components/providers/NextUIProvider'
 import QueryProvider from './components/providers/QueryProvider'
+import ErrorComponent from './components/ErrorComponent'
+import Header from '@/components/header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +25,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const session = await getServerSession(options)
-  console.log('ses', session)
   // eliteleagueesports.com
 
   return (
@@ -35,8 +35,9 @@ export default async function RootLayout({
             <Provider>
               <QueryProvider>
                 <ReduxProvider user={session?.user}>
-                  <Header />
+                  
                   <div className='w-full'>
+                    <Header />
                     {children}
                   </div>
                   

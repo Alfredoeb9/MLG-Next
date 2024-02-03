@@ -1,49 +1,81 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
+import ErrorComponent from "./ErrorComponent";
 
 
 export default function Header() {
+    const [tuser, setTuser] = useState(false)
+    const [error, setError] = useState(false);
     const session = useSession();
 
     const router = useRouter();
+    let user = false
 
-    const {data: user} = useQuery<any>({
-        queryKey: ["user"],
-        queryFn: async () => 
-            fetch(`/api/user`, {
-                method: 'POST',
+    setTimeout(() => {
+        setTuser(true)
+    }, 5000)
+
+    const { data } = useQuery<any>({
+        queryKey: ["get-user"],
+        queryFn: async () => {
+            const data = await fetch('/api/user', {
+                method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(session?.data.user.email)
-            }).then(async (res) => {
-                let data = await res.json()
+                body: JSON.stringify({email: session?.data?.user?.email})
+            });
+            
+            const json = await data.json();
 
-                if (res.status === 500) {
-                    if (data.message.includes("not enrolled in a team")) {
-                        return router.push("/create/team")
-                    }
-                }
+            console.log('data', data)
 
-                if (res.status === 201) {
-                    return data
-                }
-            }    
-            ).catch(() => {
-                console.log("catch ran up")
-            }),
-        retry: 3
-    })
-
-    console.log("session", user)
+            if (data.status == 500) {
+                return setError(true)
+            }
+        
+            if (data.status === 201) {
+                return json;    
+            }
+              
+        },
+            // fetch('/api/user', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(session?.data.user.email)
+            // }).then(async (res) => {
+            //     let data = await res.json()
+    
+                // if (res.status === 500) {
+                //     if (data.message.includes("not enrolled in a team")) {
+                //         return router.push("/create/team")
+                //     }
+                // }
+    
+            //     if (res.status === 201) {
+            //         return data
+            //     }
+            //     return data
+            // }    
+            // ).catch(() => {
+            //     console.log("catch ran up")
+            // }),
+        enabled: session.data?.user !== undefined ? true : false,
+        retry: 3,
+        refetchOnReconnect: true,
+        staleTime: 1000,        
+    });
 
     // status could === 
     // unauthenticated || authenticated
+
 
     return (
         <header className="nav">
@@ -72,7 +104,8 @@ export default function Header() {
                         </div>
                     ) : (
                         <div>
-                            {user?.data.credits}
+                            {/* <ErrorComponent /> */}
+                            {data?.data?.credits}
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar
@@ -82,7 +115,7 @@ export default function Header() {
                                     color="secondary"
                                     name={session.data.user.firstName + ' ' + session?.data.user.lastName}
                                     size="sm"
-                                    src={`${session?.data.user.email?.charAt(1)}`}
+                                    // src={`${session?.data.user.email?.charAt(1)}`}
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile"]}>
@@ -95,9 +128,9 @@ export default function Header() {
                                     <DropdownItem key="analytics">Stats</DropdownItem>
                                     <DropdownItem key="buy_credits"><Link href={"/pricing"}>Buy Credits</Link></DropdownItem>
                                     <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-                                    <DropdownItem key="logout" color="danger" onClick={(e) => {
+                                    <DropdownItem key="logout" color="danger" onClick={async (e) => {
                                                 e.preventDefault();
-                                                signOut();
+                                                await signOut();
                                                 router.push("/");
                                             }}>
                                     Log Out
@@ -109,6 +142,8 @@ export default function Header() {
                     )}
                 </div>
 			</div>
+
+            {error && <ErrorComponent message="There was problem retrieving your credits, please refresh and try agian. If this problem presist please reach out to customer service"/>}
         </header>
     )
 }
