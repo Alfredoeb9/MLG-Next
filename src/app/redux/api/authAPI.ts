@@ -44,7 +44,6 @@ const verifyEmail = async (id: any) => {
       authorization: id,
     },
   });
-  console.log('res', response)
   if (response.data) {
     // setSessionUserAndToken(response.data.data);
   }

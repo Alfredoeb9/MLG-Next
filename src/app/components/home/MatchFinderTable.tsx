@@ -15,7 +15,7 @@ import {
   } from "@nextui-org/react";
 import { columns } from "@/lib/Users";
 import Link from "next/link";
-import Image from 'next/image';
+// import Image from 'next/image';
 
 interface MatchListProps {
     data: MatchFinderTableProps[] | any,
@@ -125,12 +125,12 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "game":
                 return (
                     <div>
-                         <Image
+                         {/* <Image
                             src={`/images/${user.name}.png`} // Route of the image file
                             height={40} // Desired size with correct aspect ratio
                             width={40} // Desired size with correct aspect ratio
                             alt={`${user.name} placeholder image`}
-                        />
+                        /> */}
                     </div>
                 
                 );
@@ -141,9 +141,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 );
             case "start_time":
-                // let d1 = new Date(user.start_time), 
-                //     d2 = new Date(); 
-
                 return (
                     <Chip
                         className="capitalize border-none gap-1 text-default-600"
@@ -170,7 +167,9 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "link":
                 return (
                     <div className="flex">
-                        <Button isDisabled={d2.valueOf() >= d1.valueOf() ? true : false} className="bg-green-600"><Link  href={{ pathname: `/tournaments/${user.id}`, query: { id: user.id }}}>Accept</Link></Button>
+                        <Button 
+                            // isDisabled={d2.valueOf() >= d1.valueOf() ? true : false} 
+                            className="bg-green-600"><Link  href={`/tournaments/${user.id}`}>Accept</Link></Button>
                     </div>
                 );
             default:

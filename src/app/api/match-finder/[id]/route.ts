@@ -1,15 +1,21 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { NextResponse } from 'next/server';
+import db from '@/lib/db';
+import { NextRequest, NextResponse } from 'next/server';
  
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
     try {
-        const d = req
+        // throw new Error("this is an error")
+        const body = await req.json();
 
-        console.log("d", d)
-        // res.end(`Post: ${id}`)
-        return NextResponse.json({ message: "matches returned"}, { status: 201 });
+        const tournament = await db.tournaments.findFirst({
+            where: {
+                id: body
+            }
+        })
+
+        if (!tournament) throw new Error("Tournament does not exist")
+
+        return NextResponse.json({ data: tournament, message: "matches returned"}, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ message: `${error}`}, { status: 500 })
+        return NextResponse.json({ message: `${error}`, isError: true }, { status: 500 })
     }
-  
 }

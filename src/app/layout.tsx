@@ -31,7 +31,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextUIProviders>
-          <AppLogoutProvider>
+          {/* <AppLogoutProvider> */}
             <Provider>
               <QueryProvider>
                 <ReduxProvider user={session?.user}>
@@ -44,7 +44,7 @@ export default async function RootLayout({
               </QueryProvider>
               
             </Provider>
-          </AppLogoutProvider>
+          {/* </AppLogoutProvider> */}
         </NextUIProviders>
       </body>
     </html>
