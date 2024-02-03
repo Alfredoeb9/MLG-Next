@@ -32,8 +32,8 @@ export default function Home() {
   const { data: data, isLoading, isError, isSuccess} = useQuery<any>({
     queryKey: ["game-finder"],
     queryFn: () => 
-        fetch('/api/games').then((res) =>
-            res.json()
+        fetch('/api/games').then(async (res) =>
+            await res.json()
         ),
     retry: 3
   })
