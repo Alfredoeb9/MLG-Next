@@ -22,8 +22,8 @@ export default function HomeMatchFinder() {
                 <div className="bg-red-400 h-10 w-2 mr-4" />
 
                 <div className="text-white w-full">
-                    <h2 className="text-4xl">MatchFinder</h2>
-                    <p className="text-xl mb-2">Head to head matches where you pick the game, rules and prize.</p>
+                    <h2 className="text-3xl lg:text-4xl">MatchFinder</h2>
+                    <p className="text-base mb-2">Head to head matches where you pick the game, rules and prize.</p>
 
                     { isSuccess && <MatchFinderTable data={matches} />}
                     { isError && <p>Please refresh again!</p>}

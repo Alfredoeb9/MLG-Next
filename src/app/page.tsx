@@ -85,9 +85,9 @@ export default function Home() {
         <div className='flex flex-row place-content-start max-h-full'>
           <div className="bg-red-400 h-52 w-2 mr-4" />
           <div>
-            <h1 className='text-6xl	text-white'>WELCOME TO YOUR NEW COMPETITIVE JOURNEY</h1>
-            <h1 className='text-5xl	text-gray-400'>COMPETE FOR CASH.</h1>
-            <h1 className='text-5xl	text-gray-400'>COMPETE FOR ...</h1>
+            <h1 className='text-4xl md:text-5xl lg:text-6xl	text-white'>WELCOME TO YOUR NEW COMPETITIVE JOURNEY</h1>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl	text-gray-400'>COMPETE FOR CASH.</h1>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl	text-gray-400'>COMPETE FOR ...</h1>
 
             <Link 
               href={"/auth/sign-up"}

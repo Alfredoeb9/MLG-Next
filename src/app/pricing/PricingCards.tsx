@@ -24,7 +24,6 @@ export default function PricingCards() {
                                 sessionId: session.id,
                             });
                         }).catch(() => {
-                            console.log("log in hawmie")
                             toast('You much be loggin in to buy credits', {
                                 position: "bottom-right",
                                 autoClose: false,
@@ -36,7 +35,7 @@ export default function PricingCards() {
                         })
                     }}>
                         <CardBody className="flex justify-center items-center">
-                            <Image src={"/images/mw3.png"} width={170} height={170} alt={""} />
+                            <Image src={"/images/mw3.png"} alt={""} />
                             
                             
                         </CardBody>
