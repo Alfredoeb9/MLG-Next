@@ -48,7 +48,10 @@ const statusColorMap: Record<string, ChipProps["color"]>  = {
 
 export const MatchFinderTable = ({data}: MatchListProps) => {
     if (!data) return null;
-    type User = typeof data[0];
+    
+    type User = typeof data.matches;
+
+    
     
     // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [rowsPerPage, setRowsPerPage] = useState<number>(5);
@@ -118,6 +121,8 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         
         const cellValue = user[columnKey as keyof User];
 
+        console.log("cellValue", cellValue)
+
         let d1 = new Date(user.start_time), 
                     d2 = new Date();
         
@@ -165,6 +170,7 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 );
             case "link":
+                console.log("cellValue", cellValue)
                 return (
                     <div className="flex">
                         <Button 

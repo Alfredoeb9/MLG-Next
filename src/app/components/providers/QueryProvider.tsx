@@ -14,10 +14,10 @@ const QueryProvider = ({ children }: { children: React.ReactNode }) => {
           new QueryClient({
             defaultOptions: {
               queries: {
-                staleTime: 1000,
+                // staleTime: 1000,
                 refetchOnMount: true,
-                refetchOnReconnect: true,
-                refetchOnWindowFocus: true
+                retryOnMount: true,
+                retry: true
               },
               
             },

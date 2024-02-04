@@ -101,7 +101,7 @@ export default function Home() {
   // console.log("session====", formattedSession?.user?.username)
   // console.log("user====", user)
 
-  if (isLoading) return <Spinner label="Loading..." color="warning" />
+  // if (isLoading) return <Spinner label="Loading..." color="warning" />
 
   // console.log("user", user)
   

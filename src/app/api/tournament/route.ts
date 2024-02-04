@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   const bodier = await req.json();
   try {
-    
     if (!bodier) throw new Error("Please enroll in a active tournament")
 
     const successEnroll = await db.tournaments.update({
@@ -40,6 +39,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json({ message: `${error}` }, { status: 500 });
+    return NextResponse.json({ error: `${error}` }, { status: 500 });
   }
 }

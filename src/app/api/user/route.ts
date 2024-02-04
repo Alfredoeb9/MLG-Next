@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     const email = await req.json();
     try {
-        throw new Error("User is not enrolled in a team")
         const user = await db.user.findFirst({
             where: {
                 email: email.email

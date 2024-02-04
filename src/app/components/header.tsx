@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import ErrorComponent from "./ErrorComponent";
 
 
@@ -16,9 +16,11 @@ export default function Header() {
     const router = useRouter();
     let user = false
 
-    setTimeout(() => {
-        setTuser(true)
-    }, 5000)
+    // setTimeout(() => {
+    //     setTuser(true)
+    // }, 5000)
+
+    
 
     const { data } = useQuery<any>({
         queryKey: ["get-user"],
@@ -33,7 +35,7 @@ export default function Header() {
             
             const json = await data.json();
 
-            console.log('data', data)
+            console.log('json', json)
 
             if (data.status == 500) {
                 return setError(true)
@@ -69,8 +71,9 @@ export default function Header() {
             // }),
         enabled: session.data?.user !== undefined ? true : false,
         retry: 3,
-        refetchOnReconnect: true,
-        staleTime: 1000,        
+        refetchOnReconnect: 'always',
+        refetchOnMount: 'always',
+        refetchOnWindowFocus: 'always',
     });
 
     // status could === 
@@ -115,7 +118,6 @@ export default function Header() {
                                     color="secondary"
                                     name={session.data.user.firstName + ' ' + session?.data.user.lastName}
                                     size="sm"
-                                    // src={`${session?.data.user.email?.charAt(1)}`}
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile"]}>
