@@ -34,8 +34,6 @@ export async function POST(req: NextRequest) {
                 metadata: Metadata;
             };
 
-            console.log("completed", completedEvent)
-
             const userEmail = completedEvent.metadata.email;
             const credits = completedEvent.metadata.credits;
 

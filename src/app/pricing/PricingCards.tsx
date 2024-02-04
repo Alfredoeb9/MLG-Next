@@ -5,7 +5,7 @@ import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import { checkoutAction } from "./actions";
 import getStripe from "utils/get-stripejs";
 import { pricingCards } from "@/lib/PricingCards";
-// import Image from "next/image";
+import Image from "next/image";
 
 export default function PricingCards() {
 
@@ -30,7 +30,7 @@ export default function PricingCards() {
                         })
                     }}>
                         <CardBody className="flex justify-center items-center">
-                            {/* <Image src={"/images/mw3.png"} width={170} height={170} alt={""} /> */}
+                            <Image src={"/images/mw3.png"} width={170} height={170} alt={""} />
                             
                             
                         </CardBody>

@@ -1,5 +1,5 @@
 "use client";
-import { CheckboxGroup, Checkbox, Select, SelectItem, Spinner } from '@nextui-org/react';
+import { Select, SelectItem, Spinner } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -11,8 +11,6 @@ export default function CreateTeam() {
     const [selectedGames, setSelectedGames] = useState<string>("");
     const [error, setError] = useState<any>(null);
     const [teamName, setTeamName] = useState<string>("");
-
-    console.log("team", teamName)
 
     const { data: games, isSuccess, isLoading, isError } = useQuery<any>({
         queryKey: ["game-category"],

@@ -1,17 +1,15 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
-import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { login, selectUserAuth } from "@/redux/features/AuthContext";
-import {  redirect, useRouter } from "next/navigation";
+import { login } from "@/redux/features/AuthContext";
+import {  redirect } from "next/navigation";
 import { useResend } from "../hooks/resend"
 
 
 const SignIn = () => {
 	const dispatch = useAppDispatch()
-	const router = useRouter();
     const [email, setEmail] = useState<string>("");
 	const user = useAppSelector(state => state.authXReducer.user);
     const [loading, setLoading] = useState<boolean>(false);
@@ -87,11 +85,6 @@ const SignIn = () => {
 		} catch (error) {
 			setError(error)
 			console.log("error signin", error)
-		//   if (error?.response && error?.response?.data && error?.response.data.message)
-		// 	console.log(error);
-		//   else {
-		// 	console.log(error);
-		//   }
 		}
 	};
 

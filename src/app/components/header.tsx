@@ -4,23 +4,15 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import ErrorComponent from "./ErrorComponent";
 
 
 export default function Header() {
-    const [tuser, setTuser] = useState(false)
     const [error, setError] = useState(false);
     const session = useSession();
 
     const router = useRouter();
-    let user = false
-
-    // setTimeout(() => {
-    //     setTuser(true)
-    // }, 5000)
-
-    
 
     const { data } = useQuery<any>({
         queryKey: ["get-user"],
@@ -35,8 +27,6 @@ export default function Header() {
             
             const json = await data.json();
 
-            console.log('json', json)
-
             if (data.status == 500) {
                 return setError(true)
             }
@@ -46,39 +36,13 @@ export default function Header() {
             }
               
         },
-            // fetch('/api/user', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(session?.data.user.email)
-            // }).then(async (res) => {
-            //     let data = await res.json()
-    
-                // if (res.status === 500) {
-                //     if (data.message.includes("not enrolled in a team")) {
-                //         return router.push("/create/team")
-                //     }
-                // }
-    
-            //     if (res.status === 201) {
-            //         return data
-            //     }
-            //     return data
-            // }    
-            // ).catch(() => {
-            //     console.log("catch ran up")
-            // }),
+
         enabled: session.data?.user !== undefined ? true : false,
         retry: 3,
         refetchOnReconnect: 'always',
         refetchOnMount: 'always',
         refetchOnWindowFocus: 'always',
     });
-
-    // status could === 
-    // unauthenticated || authenticated
-
 
     return (
         <header className="nav">
@@ -107,8 +71,7 @@ export default function Header() {
                         </div>
                     ) : (
                         <div>
-                            {/* <ErrorComponent /> */}
-                            {data?.credits}
+                            
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar
@@ -120,12 +83,14 @@ export default function Header() {
                                     size="sm"
                                     />
                                 </DropdownTrigger>
-                                <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile"]}>
+                                <DropdownMenu aria-label="Profile Actions" disabledKeys={["profile", "credits"]}>
                                     <DropdownItem key="profile" className="h-14 gap-2">
-                                    <p className="font-semibold">Signed in as</p>
-                                    <p className="font-semibold">{session?.data.user.email}</p>
+                                        <p className="font-semibold">Signed in as</p>
+                                        <p className="font-semibold">{session?.data.user.email}</p>
                                     </DropdownItem>
+                                    <DropdownItem key="credits"><span className="font-black">Credits: </span> <span className="font-semibold">{data?.credits}</span></DropdownItem>
                                     <DropdownItem key="settings">My Settings</DropdownItem>
+                                    
                                     <DropdownItem key="team_settings">Team Settings</DropdownItem>
                                     <DropdownItem key="analytics">Stats</DropdownItem>
                                     <DropdownItem key="buy_credits"><Link href={"/pricing"}>Buy Credits</Link></DropdownItem>
