@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from "bcrypt";
-import { createToken, emailRegx } from "../../../../../lib/utils/utils";
+import { createToken, emailRegx } from "@/lib/utils/utils";
 import { sentVerifyUserEmail } from "../[...nextauth]/mailer";
-import db from '../../../../../lib/db';
+import db from '@/lib/db';
 import validator from 'validator';
 
 

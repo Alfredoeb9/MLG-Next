@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import db from "../../../../../lib/db";
+import db from "@/lib/db";
 import { sentVerifyUserEmail } from "../[...nextauth]/mailer";
-import { createToken } from "../../../../../lib/utils/utils";
+import { createToken } from "@/lib/utils/utils";
 
 
 export async function POST(req: Request, res: NextResponse) {
