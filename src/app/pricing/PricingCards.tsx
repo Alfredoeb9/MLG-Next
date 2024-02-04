@@ -6,6 +6,9 @@ import { checkoutAction } from "./actions";
 import getStripe from "utils/get-stripejs";
 import { pricingCards } from "@/lib/PricingCards";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.min.css';
+
 
 export default function PricingCards() {
 
@@ -22,11 +25,14 @@ export default function PricingCards() {
                             });
                         }).catch(() => {
                             console.log("log in hawmie")
-                            // toast({
-                            //     variat: "destructive",
-                            //     title: "Something went wrong",
-                            //     descripition: "You much be loggin in to buy credits"
-                            // })
+                            toast('You much be loggin in to buy credits', {
+                                position: "bottom-right",
+                                autoClose: false,
+                                closeOnClick: true,
+                                draggable: false,
+                                type: "error",
+                                toastId: 1                          
+                            })
                         })
                     }}>
                         <CardBody className="flex justify-center items-center">
@@ -45,6 +51,7 @@ export default function PricingCards() {
                     </Card>
                 ))}
             </div>
+            <ToastContainer />
         </div>
     )
 }

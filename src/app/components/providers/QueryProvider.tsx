@@ -17,7 +17,9 @@ const QueryProvider = ({ children }: { children: React.ReactNode }) => {
                 // staleTime: 1000,
                 refetchOnMount: true,
                 retryOnMount: true,
-                retry: true
+                refetchOnWindowFocus: false,
+                refetchOnReconnect: false,
+                retry: false
               },
               
             },

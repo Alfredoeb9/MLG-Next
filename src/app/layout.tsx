@@ -11,6 +11,7 @@ import { NextUIProviders } from '@/src/app/components/providers/NextUIProvider'
 import QueryProvider from './components/providers/QueryProvider'
 import ErrorComponent from './components/ErrorComponent'
 import Header from '@/components/header'
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const inter = Inter({ subsets: ['latin'] })
 

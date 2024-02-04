@@ -69,8 +69,6 @@ const SignIn = () => {
 			});
 		
 			return signInData;
-
-			// localStorage.setItem("user", JSON.stringify(user));
 			
 		} catch (error: any) {
 			return setError(error)		

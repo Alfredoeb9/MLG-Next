@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // If a user is already created and you want to associate that user with 
+    // a specific team, you need to update the User record with the teamId field.
     await db.user.update({
       where: {
         email: body.user

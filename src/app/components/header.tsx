@@ -6,43 +6,58 @@ import { useRouter } from "next/navigation";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import ErrorComponent from "./ErrorComponent";
+import { useGetUser } from "../hooks/getUser";
+import { ToastContainer, toast } from "react-toastify";
 
 
 export default function Header() {
+    const { getuser, error2, isLoading2 } = useGetUser();
     const [error, setError] = useState(false);
     const session = useSession();
 
     const router = useRouter();
 
-    const { data } = useQuery<any>({
+    const {data, isPending, isFetching, isError } = useQuery<any>({
         queryKey: ["get-user"],
-        queryFn: async () => {
-            const data = await fetch('/api/user', {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({email: session?.data?.user?.email})
-            });
-            
-            const json = await data.json();
-
-            if (data.status == 500) {
-                return setError(true)
-            }
+        queryFn: 
+        () => getuser(session?.data),
         
-            if (data.status === 201) {
-                return json;    
-            }
+        // async () => {
+        //     const data = await fetch('/api/user', {
+        //         method: 'POST', 
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({email: session?.data?.user?.email})
+        //     });
+            
+        //     const json = await data.json();
+
+        //     if (data.status == 500) {
+        //         return setError(true)
+        //     }
+        
+        //     if (data.status === 201) {
+        //         return json;    
+        //     }
               
-        },
+        // },
 
         enabled: session.data?.user !== undefined ? true : false,
-        retry: 3,
-        refetchOnReconnect: 'always',
-        refetchOnMount: 'always',
-        refetchOnWindowFocus: 'always',
+        retry: 2,
+        refetchOnWindowFocus: false,
     });
+
+    if (isError) {
+        toast(`There was problem retrieving your credits, please refresh and try agian. If this problem presist please reach out to customer service`, {
+            position: "bottom-right",
+            autoClose: false,
+            closeOnClick: true,
+            draggable: false,
+            type: "error",
+            toastId: 0                             
+        })
+    }
 
     return (
         <header className="nav">
@@ -88,10 +103,10 @@ export default function Header() {
                                         <p className="font-semibold">Signed in as</p>
                                         <p className="font-semibold">{session?.data.user.email}</p>
                                     </DropdownItem>
-                                    <DropdownItem key="credits"><span className="font-black">Credits: </span> <span className="font-semibold">{data?.credits}</span></DropdownItem>
+                                    <DropdownItem key="credits"><span className="font-black">Credits: </span> <span className="font-semibold">{ isError ? "Err" : data?.credits}</span></DropdownItem>
                                     <DropdownItem key="settings">My Settings</DropdownItem>
                                     
-                                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                                    <DropdownItem key="team_settings"><Link href="/team-settings">Team Settings</Link></DropdownItem>
                                     <DropdownItem key="analytics">Stats</DropdownItem>
                                     <DropdownItem key="buy_credits"><Link href={"/pricing"}>Buy Credits</Link></DropdownItem>
                                     <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
@@ -109,8 +124,8 @@ export default function Header() {
                     )}
                 </div>
 			</div>
-
-            {error && <ErrorComponent message="There was problem retrieving your credits, please refresh and try agian. If this problem presist please reach out to customer service"/>}
+            <ToastContainer limit={1} newestOnTop={false} />
+            {/* {error && <ErrorComponent message="There was problem retrieving your credits, please refresh and try agian. If this problem presist please reach out to customer service"/>} */}
         </header>
     )
 }

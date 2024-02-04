@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
             }
         });
 
-        if (user.teamId === null) throw new Error("User is not enrolled in a team")
+        // if (user.teamId === null) throw new Error("User is not enrolled in a team")
 
         const {username, firstName, lastName, credits, isAdmin, role, isVerified} = user
 

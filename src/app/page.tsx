@@ -1,10 +1,6 @@
 "use client";
-import React, { useState } from 'react'
-import { useAppSelector } from '@/redux/hooks';
+import React from 'react'
 import { useQuery } from "@tanstack/react-query"
-// import { selectUserAuth } from '@/redux/features/AuthContext';
-// import { getServerSession } from 'next-auth';
-// import { options } from '@/lib/auth';
 import { useSession } from 'next-auth/react';
 import {Spinner} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
@@ -13,27 +9,12 @@ import LoginBanner from '@/components/LoginBanner';
 import HomeFeaturedGames from '@/src/app/components/home/HomeFeaturedGames';
 import HomeMatchFinder from '@/components/home/HomeMatchFinder';
 import Footer from '@/components/Footer';
-import Header from '@/components/header';
 import ErrorComponent from './components/ErrorComponent';
-
-// const data: string[] = [
-//   'entry 1',
-//   'entry 2',
-//   'entry 3',
-//   'entry 4',
-//   'entry 5',
-//   'entry 6',
-//   'entry 7',
-//   'entry 8',
-//   'entry 9',
-//   'entry 10',
-//   'entry 11',
-// ]
 
 export default function Home() {
   const session = useSession();
 
-  const { data: data, isLoading, isError, isSuccess} = useQuery<any>({
+  const { data, isPending, isError, isSuccess } = useQuery<any>({
     queryKey: ["game-finder"],
     queryFn: () => 
         fetch('/api/games').then(async (res) => {
@@ -94,16 +75,8 @@ export default function Home() {
 
   const router = useRouter()
   // const user = useAppSelector(state => state.authXReducer.user);
-  // const session = useSession();
 
-  // const formattedSession = session?.data
-  // const session = await getServerSession(options)
-  // console.log("session====", formattedSession?.user?.username)
-  // console.log("user====", user)
-
-  // if (isLoading) return <Spinner label="Loading..." color="warning" />
-
-  // console.log("user", user)
+  if (isPending) return <Spinner label="Loading..." color="warning" />
   
   return (
     <main className=" bg-slate-950">
