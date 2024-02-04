@@ -13,7 +13,9 @@ export async function POST(req: NextRequest) {
 
         if (user.teamId === null) throw new Error("User is not enrolled in a team")
 
-        return NextResponse.json({ data: user }, { status: 201 })
+        const {username, firstName, lastName, credits, isAdmin, role, isVerified} = user
+
+        return NextResponse.json({ username, firstName, lastName, credits, isAdmin, role, isVerified }, { status: 201 })
     } catch (error) {
         return NextResponse.json({ error: `${error}` }, { status: 500 })
     }

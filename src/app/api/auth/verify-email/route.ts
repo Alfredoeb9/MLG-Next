@@ -81,7 +81,7 @@ export async function POST(req: Request, res: NextResponse) {
         }
       })
   
-      return NextResponse.json(user);
+      return NextResponse.json("User has verified Account");
     } catch (error) {
       return NextResponse.json(error);
     }

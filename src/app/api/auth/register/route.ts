@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
             }
         })
         await sentVerifyUserEmail(newUser.email, fullName, link)
-        return NextResponse.json({ user: newUser, message: "User created Successfully"}, { status: 201 });
+        return NextResponse.json({ firstName, lastName, username, email, isAdmin, message: "User created Successfully"}, { status: 201 });
 
         // return newUser
 

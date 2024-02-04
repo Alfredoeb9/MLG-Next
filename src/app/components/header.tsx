@@ -108,7 +108,7 @@ export default function Header() {
                     ) : (
                         <div>
                             {/* <ErrorComponent /> */}
-                            {data?.data?.credits}
+                            {data?.credits}
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import ErrorComponent from "../../components/ErrorComponent";
 
 
 export default function Enroll() {
@@ -99,9 +100,11 @@ export default function Enroll() {
         
     };
 
+    // useMutation is what we can use to trigger a refetch on the useQuery hook
     const { mutateAsync: addTodoMutation } = useMutation({
         mutationFn: fetchEnroll,
         onSuccess: () => {
+            // pass in the key that needs to get refetched
             queryClient.invalidateQueries({ queryKey: ["get-user"]})
         }
     })
@@ -124,6 +127,8 @@ export default function Enroll() {
                     console.error(error)
                 }
             }}>Enroll</button>
+
+            {error && <ErrorComponent />}
         </div>
     )
 }

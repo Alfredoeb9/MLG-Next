@@ -15,7 +15,7 @@ import {
   } from "@nextui-org/react";
 import { columns } from "@/lib/Users";
 import Link from "next/link";
-// import Image from 'next/image';
+import Image from 'next/image';
 
 interface MatchListProps {
     data: MatchFinderTableProps[] | any,
@@ -121,8 +121,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
         
         const cellValue = user[columnKey as keyof User];
 
-        console.log("cellValue", cellValue)
-
         let d1 = new Date(user.start_time), 
                     d2 = new Date();
         
@@ -130,12 +128,12 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
             case "game":
                 return (
                     <div>
-                         {/* <Image
+                         <Image
                             src={`/images/${user.name}.png`} // Route of the image file
                             height={40} // Desired size with correct aspect ratio
                             width={40} // Desired size with correct aspect ratio
                             alt={`${user.name} placeholder image`}
-                        /> */}
+                        />
                     </div>
                 
                 );
@@ -170,7 +168,6 @@ export const MatchFinderTable = ({data}: MatchListProps) => {
                     </div>
                 );
             case "link":
-                console.log("cellValue", cellValue)
                 return (
                     <div className="flex">
                         <Button 

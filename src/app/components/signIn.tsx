@@ -45,12 +45,10 @@ const SignIn = () => {
 			const signInData = await signIn("credentials", 
 				{ email: email, password: password, redirect: false
 			}).then(async (res) => {
-				console.log("false")
 				setVerifyEmail(false);
 				if (!res) return null;
 
 				if (res?.ok === false) {
-					console.log("false")
 					if (!res.error) return null
 					setError(res?.error)
 					if (res?.error.includes("Email is not verified")) {
@@ -77,7 +75,6 @@ const SignIn = () => {
 			// localStorage.setItem("user", JSON.stringify(user));
 			
 		} catch (error: any) {
-			console.log("error2", error)
 			return setError(error)		
 		}
     }
@@ -85,11 +82,8 @@ const SignIn = () => {
 	const resendEmail = async (e: any) => {
 		e.preventDefault()
 		try {
-			console.log("sending")
 		  	await resend(e, email, "resend");
-		  // const resend = await authAPI.resendVerifyEmail(email);
-		  // console.log(resend);
-		  // return resend;
+
 		} catch (error) {
 			setError(error)
 			console.log("error signin", error)
