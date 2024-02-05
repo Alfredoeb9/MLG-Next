@@ -136,16 +136,20 @@ export default function Tournaments({
                         </Card>
 
                         <div className="tournament_info w-full ml-4">
-                            <h1 className="text-3xl">{tournament.data.game}</h1>
+                            <h1 className="text-3xl font-bold">{tournament.data.game}</h1>
                             <div className="flex mb-4 items-center justify-around w-1/2">
                                 <div>
-                                    <p className="block">{tournament?.data.name}</p>
+                                    <p className="block font-bold">{tournament?.data.name}</p>
                                     <p className="block">{tournament.data.tournament_type}</p>
                                 </div>
 
                                 <Divider orientation="vertical" className="w-0.5 h-20 text-white bg-white mx-1"/>
-
-                                <p>{tournament?.data.platforms.length > 1 ? "Cross Platform" : <p className="text-bold text-small capitalize">{tournament?.data.platforms}</p>}</p>
+                                
+                                <div>
+                                <p className="font-bold">Platforms:</p>
+                                <p>{tournament?.data.platforms.length > 1 ? "Cross Platform" : <span className="text-bold text-small capitalize">{tournament?.data.platforms}</span>}</p>
+                                </div>
+                                
                             </div>
                             
                             <div className="flex gap-1 w-1/2">
@@ -175,24 +179,24 @@ export default function Tournaments({
                             </div>
                             
                             
-                            <div className="flex flex-wrap">
-                                <div className="grow">
-                                    <p>ENTRY/PLAYER</p>
+                            <div className="flex flex-wrap justify-evenly w-1/2 mt-4">
+                                <div className="">
+                                    <h5 className="font-bold">ENTRY/PLAYER</h5>
                                     <p>{tournament?.data?.entry}</p>
                                 </div>
-
-                                <div className="grow">
-                                    <p>TEAM SIZE</p>
+                                <Divider orientation="vertical" className="w-0.5 h-20 text-white bg-white mx-1"/>
+                                <div className="">
+                                    <h5 className="font-bold">TEAM SIZE</h5>
                                     <p>{tournament?.data?.team_size}</p>
                                 </div>
-
-                                <div className="grow">
-                                    <p>MAX TEAMS</p>
+                                <Divider orientation="vertical" className="w-0.5 h-20 text-white bg-white mx-1"/>
+                                <div className="">
+                                    <h5 className="font-bold">MAX TEAMS</h5>
                                     <p>{tournament?.data?.max_teams}</p>
                                 </div>
-
-                                <div className="grow">
-                                    <p>ENROLLED</p>
+                                <Divider orientation="vertical" className="w-0.5 h-20 text-white bg-white mx-1"/>
+                                <div className="">
+                                    <h5 className="font-bold">ENROLLED</h5>
                                     <p>{tournament?.data?.enrolled}</p>
                                 </div>
                             </div>
@@ -202,7 +206,10 @@ export default function Tournaments({
                     <div className="flex px-3 py-5 gap-2">
                         { d2.valueOf() <= d1.valueOf() ? (
                             <div>
-                                <p className="text-lg un"><span className="underline">Match Starts in: </span><span className="text-2xl">{days > 0 && days + "D"} {hours > 0 && hours + "H"} {minutes > 0 && minutes + "M"} {seconds > 0 && seconds + "S"}</span></p>            
+                                <p className="text-lg un">
+                                    <span className="underline">Match Starts in: </span>
+                                    <span className="text-2xl">{days > 0 && days + "D"} {hours > 0 && hours + "H"} {minutes > 0 && minutes + "M"} {seconds > 0 && seconds + "S"}</span>
+                                </p>            
                             </div>
                         ) : (
                             <div>
