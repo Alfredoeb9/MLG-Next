@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Spinner, Image } from "@nextui-org/react";
 import { Divider } from "@nextui-org/react";
 import ErrorComponent from "@/components/ErrorComponent";
 import Link from "next/link";
+// import Image from "next/image";
 
 export default function Tournaments({
     params: { id },
@@ -18,6 +19,10 @@ export default function Tournaments({
     const router = useRouter();
     const [ tournamentId, setTournamentId ] = useState<string>(id);
     const [ error, setError ] = useState<any>(null);
+    const [days, setDays] = useState(0);
+    const [hours, setHours] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+    const [seconds, setSeconds] = useState(0);
 
     const { data: tournament, isSuccess, isLoading, isError } = useQuery<any>({
         queryKey: ["tournament-finder"],
@@ -35,6 +40,26 @@ export default function Tournaments({
             }),
         retry: 3
     })
+
+    const t1 = new Date(tournament?.data.start_time).valueOf() // end
+        const t2 = new Date().valueOf();
+
+    useEffect(() => {
+        const totalSeconds = (t1 - t2) / 1000;
+
+        let i = setInterval(() => {
+            setDays(formatTime(Math.floor(totalSeconds / 3600 / 24)));
+            setHours(Math.floor(totalSeconds / 3600) % 24);
+            setMinutes(Math.floor(totalSeconds / 60) % 60);
+            setSeconds(Math.floor(totalSeconds % 60));
+        }, 1000)
+
+        return () => clearInterval(i);
+    }, [t2])
+
+    function formatTime(time: any) {
+        return time < 10 ? `0${time}` : time
+    }
 
     const fetchEnroll = async () => {
         try {
@@ -54,11 +79,7 @@ export default function Tournaments({
                     router.push(`/tournaments/enroll?id=${tournamentId}`)
                     return data;
                 };
-
-                
-            }
-                
-            ).catch(() => {
+            }).catch(() => {
                 setError(true);
             })
         } catch (error) {
@@ -66,7 +87,7 @@ export default function Tournaments({
         }
         
     }
-
+    
     if ( isLoading ) return <Spinner label="Loading..." color="warning" />
 
     if ( isError || tournament == undefined || tournament == null || tournament.isError || tournament.message.includes("does not exist")) return <ErrorComponent />
@@ -79,70 +100,117 @@ export default function Tournaments({
         })
 
     return (
-        <div className="flex flex-col items-center justify-between">
-            <div className="tournament_backgroundHeader">
-
-            </div>
-            <main className="container flex justify-center items-center">
-                <div id="tournament_info-block">
-                    <div className="tournament_image"></div>
-                    <div className="tournament_info">
-                        <h2>{tournament.data.game}</h2>
-                        <p>{tournament.data.tournament_type}</p>
-
-                        <Divider orientation="vertical" />
-
-                        <p>{tournament?.data.platforms.length > 1 ? "Cross Platform" : <p className="text-bold text-small capitalize">{tournament?.data.platforms}</p>}</p>
-                    
-                        <Card>
-                            <CardHeader>
-                                <div>
-                                    <p>REGISTRATION OPENS</p>
-                                    <p>{d2.valueOf() <= d1.valueOf() ? "OPEN NOW" : "CLOSED"}</p>
-                                </div>
+        <div className="">
+            <div className="tournament_backgroundHeader h-24 bg-mw3 bg-no-repeat bg-cover bg-center bg-fixed" />
+            <main className=" px-4">
+                <div id="tournament_info-block" className="bg-slate-400 rounded-xl">
+                    <div className="flex">
+                        <Card isFooterBlurred className="w-56 h-[300px] col-span-12 sm:col-span-7">
+                            <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                                <p className="text-tiny text-white/60 uppercase font-bold">Your day your way</p>
+                                <h4 className="text-white/90 font-medium text-xl">Your checklist for better sleep</h4>
                             </CardHeader>
-                            <CardBody>
-                                <p></p>
-                            </CardBody>
+                            <Image
+                                removeWrapper
+                                alt="Relaxing app background"
+                                className="z-0 w-full h-full object-cover"
+                                src={`/images/${tournament?.data.name}.png`}
+                                width={400}
+                            />
+                            <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+                                <div className="flex w-full justify-between items-center ">
+                                    {/* <Image
+                                        alt="Breathing app icon"
+                                        className="rounded-full w-10 h-11 bg-black"
+                                        src="/images/breathing-app-icon.jpeg"
+                                    /> */}
+                                    {/* <div className="flex flex-col"> */}
+                                        <p className="text-sm text-white/60">Prize: $200</p>
+                                        
+                                    {/* </div> */}
+
+                                    <p className="text-sm text-white/60">NA + EU</p>
+                                </div>
+                                {/* <Button radius="full" size="sm">Get App</Button> */}
+                            </CardFooter>
                         </Card>
 
-                        <Card>
-                            <CardHeader>
+                        <div className="tournament_info w-full ml-4">
+                            <h1 className="text-3xl">{tournament.data.game}</h1>
+                            <div className="flex mb-4 items-center justify-around w-1/2">
                                 <div>
-                                    <p>Start Time</p>
-                                    <p>{pstDate} PST</p>
+                                    <p className="block">{tournament?.data.name}</p>
+                                    <p className="block">{tournament.data.tournament_type}</p>
                                 </div>
-                            </CardHeader>
-                            <CardBody>
-                                <p></p>
-                            </CardBody>
-                        </Card>
-                        
-                        <div>
-                            <div>
-                                <p>ENTRY/PLAYER</p>
-                                <p>{tournament?.data?.entry}</p>
-                            </div>
 
-                            <div>
-                                <p>TEAM SIZE</p>
-                                <p>{tournament?.data?.team_size}</p>
-                            </div>
+                                <Divider orientation="vertical" className="w-0.5 h-20 text-white bg-white mx-1"/>
 
-                            <div>
-                                <p>MAX TEAMS</p>
-                                <p>{tournament?.data?.max_teams}</p>
+                                <p>{tournament?.data.platforms.length > 1 ? "Cross Platform" : <p className="text-bold text-small capitalize">{tournament?.data.platforms}</p>}</p>
                             </div>
+                            
+                            <div className="flex gap-1 w-1/2">
+                                <Card className="w-40 grow">
+                                    <CardHeader>
+                                        <div>
+                                            <p>REGISTRATION OPENS</p>
+                                            <p>{d2.valueOf() <= d1.valueOf() ? "OPEN NOW" : "CLOSED"}</p>
+                                        </div>
+                                    </CardHeader>
+                                    {/* <CardBody>
+                                        <p></p>
+                                    </CardBody> */}
+                                </Card>
 
-                            <div>
-                                <p>ENROLLED</p>
-                                <p>{tournament?.data?.enrolled}</p>
+                                <Card className="w-40 grow">
+                                    <CardHeader>
+                                        <div>
+                                            <p>Start Time</p>
+                                            <p>{pstDate} PST</p>
+                                        </div>
+                                    </CardHeader>
+                                    {/* <CardBody>
+                                        <p></p>
+                                    </CardBody> */}
+                                </Card>
+                            </div>
+                            
+                            
+                            <div className="flex flex-wrap">
+                                <div className="grow">
+                                    <p>ENTRY/PLAYER</p>
+                                    <p>{tournament?.data?.entry}</p>
+                                </div>
+
+                                <div className="grow">
+                                    <p>TEAM SIZE</p>
+                                    <p>{tournament?.data?.team_size}</p>
+                                </div>
+
+                                <div className="grow">
+                                    <p>MAX TEAMS</p>
+                                    <p>{tournament?.data?.max_teams}</p>
+                                </div>
+
+                                <div className="grow">
+                                    <p>ENROLLED</p>
+                                    <p>{tournament?.data?.enrolled}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="tournament_info_footer">
-                        <Link href={`/tournaments/enroll?id=${tournamentId}`}>Enroll Now</Link>
-                        <button>Find Teammates</button>
+                    
+                    <div className="flex px-3 py-5 gap-2">
+                        { d2.valueOf() <= d1.valueOf() ? (
+                            <div>
+                                <p className="text-lg un"><span className="underline">Match Starts in: </span><span className="text-2xl">{days > 0 && days + "D"} {hours > 0 && hours + "H"} {minutes > 0 && minutes + "M"} {seconds > 0 && seconds + "S"}</span></p>            
+                            </div>
+                        ) : (
+                            <div>
+                                <p className="text-lg un"><span className="underline">Match Starts in: </span><span className="text-2xl">Match Started</span></p>
+                            </div>
+                        )}
+                        <Button isDisabled={d2.valueOf() <= d1.valueOf() ? false : true} className="px-4 py-3 font-bold text-lg" color="success" variant="solid" size="lg" radius="md"><Link href={`/tournaments/enroll?id=${tournamentId}`}>Enroll Now</Link></Button>
+                        <Button className="px-4 py-3 text-lg font-semibold" variant="bordered" size="lg" radius="md">Find Teammates</Button>
                     </div>
                 </div>
 

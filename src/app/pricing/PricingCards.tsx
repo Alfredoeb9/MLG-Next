@@ -35,7 +35,7 @@ export default function PricingCards() {
                         })
                     }}>
                         <CardBody className="flex justify-center items-center">
-                            <Image src={"/images/mw3.png"} alt={""} />
+                            <Image src={"/images/mw3.png"} alt={""} width={200} height={200} />
                             
                             
                         </CardBody>
